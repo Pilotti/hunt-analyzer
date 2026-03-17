@@ -4,7 +4,7 @@ import sys
 
 def _get_base_path():
     if getattr(sys, 'frozen', False):
-        return os.path.dirname(sys.executable)
+        return sys._MEIPASS
     return os.path.dirname(os.path.abspath(__file__ + "/.."))
 
 DB_PATH = os.path.join(_get_base_path(), "database", "app.db")
