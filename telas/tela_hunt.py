@@ -6,10 +6,16 @@ from utils.search_box import SearchBox
 from assets.theme import CORES
 import json
 import os
+import sys
 
-DROPS_PATH = os.path.join(os.path.dirname(__file__), "..", "banco", "itens_drop.json")
-CONSUMIVEIS_PATH = os.path.join(os.path.dirname(__file__), "..", "banco", "itens_consumivel.json")
-INIMIGOS_PATH = os.path.join(os.path.dirname(__file__), "..", "banco", "inimigos.json")
+def _get_base_path():
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(sys.executable)
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+
+DROPS_PATH = os.path.join(_get_base_path(), "banco", "itens_drop.json")
+CONSUMIVEIS_PATH = os.path.join(_get_base_path(), "banco", "itens_consumivel.json")
+INIMIGOS_PATH = os.path.join(_get_base_path(), "banco", "inimigos.json")
 
 class TelaHunt(ctk.CTkFrame):
     def __init__(self, master, usuario, personagem, ao_voltar, ao_finalizar):
@@ -70,7 +76,6 @@ class TelaHunt(ctk.CTkFrame):
             msg = "\n".join(self._erros_banco)
             self.after(300, lambda: self._mostrar_erro(f"Atenção nos arquivos de banco:\n\n{msg}"))
 
-        # Header
         header = ctk.CTkFrame(self, fg_color=CORES["bg_header"], corner_radius=0)
         header.pack(fill="x")
 
@@ -94,7 +99,6 @@ class TelaHunt(ctk.CTkFrame):
             text_color=CORES["ouro"])
         self.resumo.pack(side="right", padx=10)
 
-        # Tabs
         self.tabs = ctk.CTkTabview(self,
             fg_color=CORES["bg_card"],
             segmented_button_fg_color=CORES["bg_header"],
@@ -113,7 +117,6 @@ class TelaHunt(ctk.CTkFrame):
         self._construir_aba_gastos()
         self._construir_aba_inimigos()
 
-        # Footer
         footer = ctk.CTkFrame(self, fg_color=CORES["bg_header"], corner_radius=0)
         footer.pack(fill="x")
 
@@ -293,7 +296,8 @@ class TelaHunt(ctk.CTkFrame):
             widget.destroy()
 
         for idx, item in enumerate(self.drops):
-            row = ctk.CTkFrame(self.lista_drops, fg_color=CORES["bg_card"] if idx % 2 == 0 else "transparent",
+            row = ctk.CTkFrame(self.lista_drops,
+                fg_color=CORES["bg_card"] if idx % 2 == 0 else "transparent",
                 corner_radius=4)
             row.pack(fill="x", pady=1)
 
@@ -368,7 +372,8 @@ class TelaHunt(ctk.CTkFrame):
             widget.destroy()
 
         for idx, item in enumerate(self.gastos):
-            row = ctk.CTkFrame(self.lista_gastos, fg_color=CORES["bg_card"] if idx % 2 == 0 else "transparent",
+            row = ctk.CTkFrame(self.lista_gastos,
+                fg_color=CORES["bg_card"] if idx % 2 == 0 else "transparent",
                 corner_radius=4)
             row.pack(fill="x", pady=1)
 
@@ -424,7 +429,8 @@ class TelaHunt(ctk.CTkFrame):
             widget.destroy()
 
         for idx, item in enumerate(self.inimigos):
-            row = ctk.CTkFrame(self.lista_inimigos, fg_color=CORES["bg_card"] if idx % 2 == 0 else "transparent",
+            row = ctk.CTkFrame(self.lista_inimigos,
+                fg_color=CORES["bg_card"] if idx % 2 == 0 else "transparent",
                 corner_radius=4)
             row.pack(fill="x", pady=1)
 
