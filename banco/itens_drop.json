@@ -1,0 +1,8 @@
+[
+    {"nome": "Mana Potion", "preco_npc": 50},
+    {"nome": "Strong Mana Potion", "preco_npc": 100},
+    {"nome": "Great Mana Potion", "preco_npc": 150},
+    {"nome": "Health Potion", "preco_npc": 50},
+    {"nome": "Strong Health Potion", "preco_npc": 100},
+    {"nome": "Great Health Potion", "preco_npc": 150}
+]
