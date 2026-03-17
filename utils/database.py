@@ -23,6 +23,8 @@ def inicializar():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             usuario_id INTEGER NOT NULL,
             nome TEXT NOT NULL,
+            cla TEXT NOT NULL,
+            nivel INTEGER NOT NULL DEFAULT 1,
             FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
         );
 

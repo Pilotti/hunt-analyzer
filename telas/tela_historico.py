@@ -3,22 +3,59 @@ from utils.database import conectar
 from utils.calculos import calcular_hunt, calcular_inimigos
 from utils.exportar import gerar_relatorio
 
-class TelaHistorico(ctk.CTkToplevel):
-    def __init__(self, master, personagem):
-        super().__init__(master)
+class TelaHistorico(ctk.CTkFrame):
+    def __init__(self, master, personagem, ao_voltar):
+        super().__init__(master, fg_color="transparent")
         self.personagem = personagem
-        self.title(f"Histórico — {personagem['nome']}")
-        self.geometry("600x600")
-        self.grab_set()
+        self.ao_voltar = ao_voltar
         self._construir()
         self._carregar_hunts()
 
     def _construir(self):
-        ctk.CTkLabel(self, text=f"Histórico de {self.personagem['nome']}",
-            font=ctk.CTkFont(size=20, weight="bold")).pack(pady=20)
+        header = ctk.CTkFrame(self, fg_color="transparent")
+        header.pack(fill="x", padx=30, pady=(30, 0))
 
-        self.frame_lista = ctk.CTkScrollableFrame(self, width=540, height=480)
-        self.frame_lista.pack(pady=10, padx=20)
+        ctk.CTkLabel(header, text=f"Histórico — {self.personagem['nome']}",
+            font=ctk.CTkFont(size=24, weight="bold")).pack(side="left")
+
+        ctk.CTkButton(header, text="← Voltar", width=100, fg_color="transparent",
+            border_width=1, command=self.ao_voltar).pack(side="right")
+
+        self.card_resumo = ctk.CTkFrame(self, fg_color="#1e1e1e")
+        self.card_resumo.pack(fill="x", padx=30, pady=(15, 0))
+
+        self.resumo_labels = ctk.CTkFrame(self.card_resumo, fg_color="transparent")
+        self.resumo_labels.pack(fill="x", padx=15, pady=10)
+
+        self.frame_lista = ctk.CTkScrollableFrame(self)
+        self.frame_lista.pack(fill="both", expand=True, padx=30, pady=20)
+
+    def _atualizar_resumo_geral(self, hunts_data):
+        for widget in self.resumo_labels.winfo_children():
+            widget.destroy()
+
+        if not hunts_data:
+            ctk.CTkLabel(self.resumo_labels, text="Nenhuma hunt registrada.",
+                text_color="gray").pack(side="left")
+            return
+
+        total_hunts = len(hunts_data)
+        total_duracao = sum(h["duracao"] for h in hunts_data)
+        total_lucro_npc = sum(h["lucro_npc"] for h in hunts_data)
+        total_lucro_jogador = sum(h["lucro_jogador"] for h in hunts_data)
+        horas = total_duracao // 60
+        minutos = total_duracao % 60
+
+        for texto, valor in [
+            ("🗂 Hunts", str(total_hunts)),
+            ("⏱ Tempo total", f"{horas}h{minutos:02d}min"),
+            ("💰 Lucro NPC", f"{total_lucro_npc:,} gp"),
+            ("💰 Lucro Jogador", f"{total_lucro_jogador:,} gp"),
+        ]:
+            frame = ctk.CTkFrame(self.resumo_labels, fg_color="transparent")
+            frame.pack(side="left", expand=True)
+            ctk.CTkLabel(frame, text=texto, font=ctk.CTkFont(size=11), text_color="gray").pack()
+            ctk.CTkLabel(frame, text=valor, font=ctk.CTkFont(size=14, weight="bold")).pack()
 
     def _carregar_hunts(self):
         for widget in self.frame_lista.winfo_children():
@@ -32,6 +69,25 @@ class TelaHistorico(ctk.CTkToplevel):
         """, (self.personagem["id"],))
         hunts = cursor.fetchall()
         conn.close()
+
+        hunts_data = []
+        for hunt in hunts:
+            conn = conectar()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM hunt_drops WHERE hunt_id = ?", (hunt["id"],))
+            drops = [dict(d) for d in cursor.fetchall()]
+            cursor.execute("SELECT * FROM hunt_gastos WHERE hunt_id = ?", (hunt["id"],))
+            gastos = [dict(g) for g in cursor.fetchall()]
+            conn.close()
+
+            calculos = calcular_hunt(hunt["duracao_minutos"], drops, gastos)
+            hunts_data.append({
+                "duracao": hunt["duracao_minutos"],
+                "lucro_npc": calculos["lucro_npc"],
+                "lucro_jogador": calculos["lucro_jogador"]
+            })
+
+        self._atualizar_resumo_geral(hunts_data)
 
         if not hunts:
             ctk.CTkLabel(self.frame_lista, text="Nenhuma hunt registrada.").pack(pady=20)
