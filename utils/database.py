@@ -15,7 +15,7 @@ def inicializar():
     cursor.executescript("""
         CREATE TABLE IF NOT EXISTS usuarios (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
+            email TEXT UNIQUE NOT NULL,
             senha TEXT NOT NULL
         );
 
