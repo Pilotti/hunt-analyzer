@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from utils.database import conectar
+from telas.tela_historico import TelaHistorico
 
 class TelaPersonagens(ctk.CTk):
     def __init__(self, usuario, ao_selecionar):
@@ -47,12 +48,35 @@ class TelaPersonagens(ctk.CTk):
             frame = ctk.CTkFrame(self.frame_lista, fg_color="transparent")
             frame.pack(fill="x", pady=4)
 
-            ctk.CTkButton(frame, text=p["nome"], width=220,
+            ctk.CTkButton(frame, text=p["nome"], width=130,
                 command=lambda pid=p["id"], pnome=p["nome"]: self._selecionar(pid, pnome)).pack(side="left", padx=4)
+
+            ctk.CTkButton(frame, text="Histórico", width=80, fg_color="transparent",
+                border_width=1,
+                command=lambda pid=p["id"], pnome=p["nome"]: self._historico(pid, pnome)).pack(side="left", padx=4)
 
             ctk.CTkButton(frame, text="🗑", width=40, fg_color="transparent",
                 border_width=1, text_color="red",
-                command=lambda pid=p["id"]: self._remover(pid)).pack(side="left", padx=4)
+                command=lambda pid=p["id"]: self._confirmar_remover(pid)).pack(side="left", padx=4)
+
+    def _confirmar_remover(self, personagem_id):
+        janela = ctk.CTkToplevel(self)
+        janela.title("Confirmar")
+        janela.geometry("300x150")
+        janela.grab_set()
+        janela.resizable(False, False)
+
+        ctk.CTkLabel(janela, text="Deseja apagar este personagem?",
+            font=ctk.CTkFont(size=14)).pack(pady=25)
+
+        botoes = ctk.CTkFrame(janela, fg_color="transparent")
+        botoes.pack()
+
+        ctk.CTkButton(botoes, text="Sim, apagar", width=120, fg_color="red",
+            command=lambda: [janela.destroy(), self._remover(personagem_id)]).pack(side="left", padx=10)
+
+        ctk.CTkButton(botoes, text="Cancelar", width=120, fg_color="transparent",
+            border_width=1, command=janela.destroy).pack(side="left", padx=10)
 
     def _adicionar(self):
         nome = self.entry_personagem.get().strip()
@@ -78,6 +102,9 @@ class TelaPersonagens(ctk.CTk):
         conn.commit()
         conn.close()
         self._carregar_personagens()
+
+    def _historico(self, personagem_id, nome):
+        TelaHistorico(self, {"id": personagem_id, "nome": nome})
 
     def _selecionar(self, personagem_id, nome):
         self.destroy()
