@@ -21,6 +21,18 @@ class TelaHistorico(ctk.CTkFrame):
         ctk.CTkButton(header, text="← Voltar", width=100, fg_color="transparent",
             border_width=1, command=self.ao_voltar).pack(side="right")
 
+        filtros = ctk.CTkFrame(self, fg_color="transparent")
+        filtros.pack(fill="x", padx=30, pady=(10, 0))
+
+        ctk.CTkLabel(filtros, text="Ordenar por:").pack(side="left", padx=(0, 5))
+
+        self.ordem = ctk.CTkComboBox(filtros,
+            values=["Data (recente)", "Data (antiga)", "Maior lucro", "Menor lucro", "Maior duração"],
+            width=180, state="readonly",
+            command=lambda v: self._carregar_hunts())
+        self.ordem.set("Data (recente)")
+        self.ordem.pack(side="left", padx=5)
+
         self.card_resumo = ctk.CTkFrame(self, fg_color="#1e1e1e")
         self.card_resumo.pack(fill="x", padx=30, pady=(15, 0))
 
@@ -61,16 +73,25 @@ class TelaHistorico(ctk.CTkFrame):
         for widget in self.frame_lista.winfo_children():
             widget.destroy()
 
+        ordem = self.ordem.get() if hasattr(self, "ordem") else "Data (recente)"
+
+        if ordem == "Data (recente)":
+            order_sql = "ORDER BY criado_em DESC"
+        elif ordem == "Data (antiga)":
+            order_sql = "ORDER BY criado_em ASC"
+        else:
+            order_sql = "ORDER BY criado_em DESC"
+
         conn = conectar()
         cursor = conn.cursor()
-        cursor.execute("""
-            SELECT * FROM hunts WHERE personagem_id = ?
-            ORDER BY criado_em DESC
-        """, (self.personagem["id"],))
-        hunts = cursor.fetchall()
+        cursor.execute(f"SELECT * FROM hunts WHERE personagem_id = ? {order_sql}",
+            (self.personagem["id"],))
+        hunts = list(cursor.fetchall())
         conn.close()
 
         hunts_data = []
+        hunts_com_calculos = []
+
         for hunt in hunts:
             conn = conectar()
             cursor = conn.cursor()
@@ -86,6 +107,14 @@ class TelaHistorico(ctk.CTkFrame):
                 "lucro_npc": calculos["lucro_npc"],
                 "lucro_jogador": calculos["lucro_jogador"]
             })
+            hunts_com_calculos.append((hunt, calculos["lucro_jogador"]))
+
+        if ordem == "Maior lucro":
+            hunts = [h for h, _ in sorted(hunts_com_calculos, key=lambda x: x[1], reverse=True)]
+        elif ordem == "Menor lucro":
+            hunts = [h for h, _ in sorted(hunts_com_calculos, key=lambda x: x[1], reverse=False)]
+        elif ordem == "Maior duração":
+            hunts = sorted(hunts, key=lambda h: h["duracao_minutos"], reverse=True)
 
         self._atualizar_resumo_geral(hunts_data)
 
@@ -144,6 +173,10 @@ class TelaHistorico(ctk.CTkFrame):
         janela.geometry("300x150")
         janela.grab_set()
         janela.resizable(False, False)
+        janela.update_idletasks()
+        x = self.master.winfo_x() + (self.master.winfo_width() // 2) - 150
+        y = self.master.winfo_y() + (self.master.winfo_height() // 2) - 75
+        janela.geometry(f"+{x}+{y}")
 
         ctk.CTkLabel(janela, text="Deseja apagar esta hunt?",
             font=ctk.CTkFont(size=14)).pack(pady=25)
@@ -178,6 +211,10 @@ class TelaHistorico(ctk.CTkFrame):
         janela.title("Relatório da Hunt")
         janela.geometry("500x600")
         janela.grab_set()
+        janela.update_idletasks()
+        x = self.master.winfo_x() + (self.master.winfo_width() // 2) - 250
+        y = self.master.winfo_y() + (self.master.winfo_height() // 2) - 300
+        janela.geometry(f"+{x}+{y}")
 
         ctk.CTkLabel(janela, text="Resumo da Hunt",
             font=ctk.CTkFont(size=20, weight="bold")).pack(pady=20)
@@ -189,10 +226,25 @@ class TelaHistorico(ctk.CTkFrame):
 
         ctk.CTkButton(janela, text="Copiar", width=200,
             command=lambda: self._copiar(relatorio)).pack(pady=5)
+        ctk.CTkButton(janela, text="💾 Salvar como .txt", width=200,
+            command=lambda: self._salvar_txt(relatorio, self.personagem["nome"])).pack(pady=5)
         ctk.CTkButton(janela, text="Fechar", width=200,
             fg_color="transparent", border_width=1,
             command=janela.destroy).pack(pady=5)
 
+    def _salvar_txt(self, relatorio, nome_personagem):
+        from tkinter import filedialog
+        from datetime import datetime
+        nome_arquivo = f"hunt_{nome_personagem}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+        caminho = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[("Texto", "*.txt")],
+            initialfile=nome_arquivo
+        )
+        if caminho:
+            with open(caminho, "w", encoding="utf-8") as f:
+                f.write(relatorio)
+
     def _copiar(self, texto):
-        self.clipboard_clear()
-        self.clipboard_append(texto)
+        self.master.clipboard_clear()
+        self.master.clipboard_append(texto)

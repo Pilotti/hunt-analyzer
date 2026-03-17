@@ -1,5 +1,9 @@
 import bcrypt
+import re
 from utils.database import conectar
+
+def email_valido(email):
+    return re.match(r"^[\w\.-]+@[\w\.-]+\.\w{2,}$", email) is not None
 
 def cadastrar_usuario(email, senha):
     conn = conectar()

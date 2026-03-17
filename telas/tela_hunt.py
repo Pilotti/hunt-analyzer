@@ -92,16 +92,24 @@ class TelaHunt(ctk.CTkFrame):
         footer.pack(fill="x", padx=20, pady=10)
 
         ctk.CTkLabel(footer, text="Duração:").pack(side="left", padx=5)
+
         self.horas = ctk.CTkEntry(footer, placeholder_text="Horas", width=80)
         self.horas.pack(side="left", padx=5)
+        self.horas.bind("<KeyPress>", self._apenas_numeros)
+
         self.minutos = ctk.CTkEntry(footer, placeholder_text="Minutos", width=80)
         self.minutos.pack(side="left", padx=5)
+        self.minutos.bind("<KeyPress>", self._apenas_numeros)
 
         self.resumo = ctk.CTkLabel(footer, text="Loot NPC: 0 gp  |  Loot Jogador: 0 gp")
         self.resumo.pack(side="left", padx=20)
 
         ctk.CTkButton(footer, text="Finalizar Hunt", width=160,
             command=self._finalizar).pack(side="right", padx=5)
+
+    def _apenas_numeros(self, event):
+        if event.char and not event.char.isdigit() and event.keysym not in ("BackSpace", "Delete", "Left", "Right", "Tab"):
+            return "break"
 
     def _construir_aba_drops(self):
         aba = self.tabs.tab("Drops")
@@ -119,6 +127,7 @@ class TelaHunt(ctk.CTkFrame):
         self.drop_qtd = ctk.CTkEntry(row, placeholder_text="Quantidade", width=100)
         self.drop_qtd.pack(side="left", padx=5)
         self.drop_qtd.bind("<Return>", lambda e: self._adicionar_drop())
+        self.drop_qtd.bind("<KeyPress>", self._apenas_numeros)
 
         ctk.CTkButton(row, text="Adicionar", width=100,
             command=self._adicionar_drop).pack(side="left", padx=5)
@@ -151,9 +160,13 @@ class TelaHunt(ctk.CTkFrame):
         self.gasto_qtd = ctk.CTkEntry(row, placeholder_text="Quantidade", width=120)
         self.gasto_qtd.pack(side="left", padx=5)
         self.gasto_qtd.bind("<Return>", lambda e: self._adicionar_gasto())
+        self.gasto_qtd.bind("<KeyPress>", self._apenas_numeros)
 
         ctk.CTkButton(row, text="Adicionar", width=100,
             command=self._adicionar_gasto).pack(side="left", padx=5)
+
+        self.erro_gasto = ctk.CTkLabel(aba, text="", text_color="red")
+        self.erro_gasto.pack(anchor="w", padx=5)
 
         header = ctk.CTkFrame(aba, fg_color="#2b2b2b")
         header.pack(fill="x", padx=5, pady=(5, 0))
@@ -180,9 +193,13 @@ class TelaHunt(ctk.CTkFrame):
         self.inimigo_qtd = ctk.CTkEntry(row, placeholder_text="Quantidade", width=120)
         self.inimigo_qtd.pack(side="left", padx=5)
         self.inimigo_qtd.bind("<Return>", lambda e: self._adicionar_inimigo())
+        self.inimigo_qtd.bind("<KeyPress>", self._apenas_numeros)
 
         ctk.CTkButton(row, text="Adicionar", width=100,
             command=self._adicionar_inimigo).pack(side="left", padx=5)
+
+        self.erro_inimigo = ctk.CTkLabel(aba, text="", text_color="red")
+        self.erro_inimigo.pack(anchor="w", padx=5)
 
         header = ctk.CTkFrame(aba, fg_color="#2b2b2b")
         header.pack(fill="x", padx=5, pady=(5, 0))
@@ -242,6 +259,7 @@ class TelaHunt(ctk.CTkFrame):
             entry_jogador = ctk.CTkEntry(row, width=130)
             entry_jogador.insert(0, str(item["preco_jogador"]))
             entry_jogador.pack(side="left", padx=5)
+            entry_jogador.bind("<KeyPress>", self._apenas_numeros)
             entry_jogador.bind("<FocusOut>", lambda e, i=idx, en=entry_jogador: self._atualizar_preco_jogador(i, en))
 
             ctk.CTkButton(row, text="🗑", width=40, fg_color="transparent",
@@ -263,13 +281,19 @@ class TelaHunt(ctk.CTkFrame):
         nome = self.gasto_search.get()
         qtd = self.gasto_qtd.get()
 
-        if not nome or not qtd.isdigit():
+        if not nome:
+            self.erro_gasto.configure(text="Selecione um consumível.")
+            return
+        if not qtd.isdigit():
+            self.erro_gasto.configure(text="Quantidade inválida.")
             return
 
         item = next((i for i in self.itens_consumivel if i["nome"] == nome), None)
         if not item:
+            self.erro_gasto.configure(text="Item não encontrado na lista.")
             return
 
+        self.erro_gasto.configure(text="")
         existente = next((g for g in self.gastos if g["item_nome"] == nome), None)
         if existente:
             existente["quantidade"] += int(qtd)
@@ -311,9 +335,19 @@ class TelaHunt(ctk.CTkFrame):
         nome = self.inimigo_search.get()
         qtd = self.inimigo_qtd.get()
 
-        if not nome or not qtd.isdigit():
+        if not nome:
+            self.erro_inimigo.configure(text="Selecione um inimigo.")
+            return
+        if not qtd.isdigit():
+            self.erro_inimigo.configure(text="Quantidade inválida.")
             return
 
+        item = next((i for i in self.inimigos_banco if i["nome"] == nome), None)
+        if not item:
+            self.erro_inimigo.configure(text="Inimigo não encontrado na lista.")
+            return
+
+        self.erro_inimigo.configure(text="")
         existente = next((i for i in self.inimigos if i["inimigo_nome"] == nome), None)
         if existente:
             existente["quantidade"] += int(qtd)
@@ -351,48 +385,45 @@ class TelaHunt(ctk.CTkFrame):
 
     def _voltar_seguro(self):
         if self.drops or self.gastos or self.inimigos:
-            janela = ctk.CTkToplevel(self)
-            janela.title("Atenção")
-            janela.geometry("320x150")
-            janela.grab_set()
-            janela.resizable(False, False)
-
-            ctk.CTkLabel(janela, text="Você tem uma hunt em andamento.\nDeseja sair sem salvar?",
-                font=ctk.CTkFont(size=13), wraplength=280).pack(pady=25)
-
-            botoes = ctk.CTkFrame(janela, fg_color="transparent")
-            botoes.pack()
-
-            ctk.CTkButton(botoes, text="Sair sem salvar", width=130, fg_color="red",
-                command=lambda: [janela.destroy(), self._restaurar_protocolo(), self.ao_voltar()]).pack(side="left", padx=10)
-
-            ctk.CTkButton(botoes, text="Cancelar", width=120, fg_color="transparent",
-                border_width=1, command=janela.destroy).pack(side="left", padx=10)
+            self._popup_confirmacao(
+                "Você tem uma hunt em andamento.\nDeseja sair sem salvar?",
+                lambda: [self._restaurar_protocolo(), self.ao_voltar()]
+            )
         else:
             self._restaurar_protocolo()
             self.ao_voltar()
 
     def _confirmar_fechar(self):
         if self.drops or self.gastos or self.inimigos:
-            janela = ctk.CTkToplevel(self)
-            janela.title("Atenção")
-            janela.geometry("320x150")
-            janela.grab_set()
-            janela.resizable(False, False)
-
-            ctk.CTkLabel(janela, text="Você tem uma hunt em andamento.\nDeseja sair sem salvar?",
-                font=ctk.CTkFont(size=13), wraplength=280).pack(pady=25)
-
-            botoes = ctk.CTkFrame(janela, fg_color="transparent")
-            botoes.pack()
-
-            ctk.CTkButton(botoes, text="Sair sem salvar", width=130, fg_color="red",
-                command=lambda: [janela.destroy(), self.master.destroy()]).pack(side="left", padx=10)
-
-            ctk.CTkButton(botoes, text="Cancelar", width=120, fg_color="transparent",
-                border_width=1, command=janela.destroy).pack(side="left", padx=10)
+            self._popup_confirmacao(
+                "Você tem uma hunt em andamento.\nDeseja sair sem salvar?",
+                lambda: self.master.destroy()
+            )
         else:
             self.master.destroy()
+
+    def _popup_confirmacao(self, mensagem, ao_confirmar):
+        janela = ctk.CTkToplevel(self)
+        janela.title("Atenção")
+        janela.geometry("320x150")
+        janela.grab_set()
+        janela.resizable(False, False)
+        janela.update_idletasks()
+        x = self.master.winfo_x() + (self.master.winfo_width() // 2) - 160
+        y = self.master.winfo_y() + (self.master.winfo_height() // 2) - 75
+        janela.geometry(f"+{x}+{y}")
+
+        ctk.CTkLabel(janela, text=mensagem,
+            font=ctk.CTkFont(size=13), wraplength=280).pack(pady=25)
+
+        botoes = ctk.CTkFrame(janela, fg_color="transparent")
+        botoes.pack()
+
+        ctk.CTkButton(botoes, text="Sair sem salvar", width=130, fg_color="red",
+            command=lambda: [janela.destroy(), ao_confirmar()]).pack(side="left", padx=10)
+
+        ctk.CTkButton(botoes, text="Cancelar", width=120, fg_color="transparent",
+            border_width=1, command=janela.destroy).pack(side="left", padx=10)
 
     def _restaurar_protocolo(self):
         self.master.protocol("WM_DELETE_WINDOW", self.master.destroy)
@@ -449,6 +480,10 @@ class TelaHunt(ctk.CTkFrame):
         janela.geometry("300x130")
         janela.grab_set()
         janela.resizable(False, False)
+        janela.update_idletasks()
+        x = self.master.winfo_x() + (self.master.winfo_width() // 2) - 150
+        y = self.master.winfo_y() + (self.master.winfo_height() // 2) - 65
+        janela.geometry(f"+{x}+{y}")
 
         ctk.CTkLabel(janela, text=mensagem,
             font=ctk.CTkFont(size=13), wraplength=260).pack(pady=25)
@@ -460,6 +495,10 @@ class TelaHunt(ctk.CTkFrame):
         janela.title("Relatório da Hunt")
         janela.geometry("500x600")
         janela.grab_set()
+        janela.update_idletasks()
+        x = self.master.winfo_x() + (self.master.winfo_width() // 2) - 250
+        y = self.master.winfo_y() + (self.master.winfo_height() // 2) - 300
+        janela.geometry(f"+{x}+{y}")
 
         ctk.CTkLabel(janela, text="Resumo da Hunt",
             font=ctk.CTkFont(size=20, weight="bold")).pack(pady=20)
