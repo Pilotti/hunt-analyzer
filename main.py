@@ -1,18 +1,18 @@
+import customtkinter as ctk
 from utils.database import inicializar
-from telas.tela_login import TelaLogin
-from telas.tela_personagens import TelaPersonagens
-from telas.tela_hunt import TelaHunt
-from telas.tela_historico import TelaHistorico
+from assets.theme import CORES
 
 class App:
     def __init__(self):
-        import customtkinter as ctk
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
+
         self.root = ctk.CTk()
         self.root.title("Hunt Analyzer")
         self.root.geometry("900x600")
         self.root.minsize(800, 500)
+        self.root.configure(fg_color=CORES["bg_principal"])
+
         self._usuario = None
         self._frame_atual = None
         inicializar()
@@ -26,6 +26,7 @@ class App:
     def _mostrar_login(self):
         from telas.tela_login import TelaLogin
         self._limpar()
+        self.root.protocol("WM_DELETE_WINDOW", self.root.destroy)
         self._frame_atual = TelaLogin(self.root, ao_logar=self._ao_logar)
         self._frame_atual.pack(fill="both", expand=True)
 

@@ -3,6 +3,7 @@ from utils.database import conectar
 from utils.calculos import calcular_hunt, calcular_inimigos
 from utils.exportar import gerar_relatorio
 from utils.search_box import SearchBox
+from assets.theme import CORES
 import json
 import os
 
@@ -12,7 +13,7 @@ INIMIGOS_PATH = os.path.join(os.path.dirname(__file__), "..", "banco", "inimigos
 
 class TelaHunt(ctk.CTkFrame):
     def __init__(self, master, usuario, personagem, ao_voltar, ao_finalizar):
-        super().__init__(master, fg_color="transparent")
+        super().__init__(master, fg_color=CORES["bg_principal"])
         self.usuario = usuario
         self.personagem = personagem
         self.ao_voltar = ao_voltar
@@ -69,15 +70,39 @@ class TelaHunt(ctk.CTkFrame):
             msg = "\n".join(self._erros_banco)
             self.after(300, lambda: self._mostrar_erro(f"Atenção nos arquivos de banco:\n\n{msg}"))
 
-        header = ctk.CTkFrame(self, fg_color="transparent")
-        header.pack(fill="x", padx=20, pady=(20, 0))
+        # Header
+        header = ctk.CTkFrame(self, fg_color=CORES["bg_header"], corner_radius=0)
+        header.pack(fill="x")
 
-        ctk.CTkLabel(header, text=f"Hunt — {self.personagem['nome']}",
-            font=ctk.CTkFont(size=22, weight="bold")).pack(side="left")
-        ctk.CTkButton(header, text="← Voltar", width=100, fg_color="transparent",
-            border_width=1, command=self._voltar_seguro).pack(side="right")
+        inner = ctk.CTkFrame(header, fg_color="transparent")
+        inner.pack(fill="x", padx=20, pady=12)
 
-        self.tabs = ctk.CTkTabview(self)
+        ctk.CTkButton(inner, text="← Voltar", width=90,
+            fg_color="transparent", border_width=1,
+            border_color=CORES["borda"],
+            text_color=CORES["texto_secundario"],
+            hover_color=CORES["bg_input"],
+            command=self._voltar_seguro).pack(side="left")
+
+        ctk.CTkLabel(inner, text=f"⚔ Hunt — {self.personagem['nome']}",
+            font=ctk.CTkFont(size=18, weight="bold"),
+            text_color=CORES["texto_principal"]).pack(side="left", padx=15)
+
+        self.resumo = ctk.CTkLabel(inner,
+            text="Loot NPC: 0 gp  |  Loot Jogador: 0 gp",
+            font=ctk.CTkFont(size=12),
+            text_color=CORES["ouro"])
+        self.resumo.pack(side="right", padx=10)
+
+        # Tabs
+        self.tabs = ctk.CTkTabview(self,
+            fg_color=CORES["bg_card"],
+            segmented_button_fg_color=CORES["bg_header"],
+            segmented_button_selected_color=CORES["ouro"],
+            segmented_button_selected_hover_color=CORES["ouro_hover"],
+            segmented_button_unselected_color=CORES["bg_header"],
+            segmented_button_unselected_hover_color=CORES["bg_input"],
+            text_color=CORES["texto_principal"])
         self.tabs.pack(fill="both", expand=True, padx=20, pady=10)
 
         self.tabs.add("Drops")
@@ -88,28 +113,40 @@ class TelaHunt(ctk.CTkFrame):
         self._construir_aba_gastos()
         self._construir_aba_inimigos()
 
-        footer = ctk.CTkFrame(self, fg_color="transparent")
-        footer.pack(fill="x", padx=20, pady=10)
+        # Footer
+        footer = ctk.CTkFrame(self, fg_color=CORES["bg_header"], corner_radius=0)
+        footer.pack(fill="x")
 
-        ctk.CTkLabel(footer, text="Duração:").pack(side="left", padx=5)
+        inner_footer = ctk.CTkFrame(footer, fg_color="transparent")
+        inner_footer.pack(fill="x", padx=20, pady=12)
 
-        self.horas = ctk.CTkEntry(footer, placeholder_text="Horas", width=80)
+        ctk.CTkLabel(inner_footer, text="Duração:",
+            text_color=CORES["texto_secundario"]).pack(side="left", padx=(0, 5))
+
+        self.horas = ctk.CTkEntry(inner_footer, placeholder_text="Horas", width=80,
+            fg_color=CORES["bg_input"], border_color=CORES["borda"],
+            text_color=CORES["texto_principal"])
         self.horas.pack(side="left", padx=5)
         self.horas.bind("<KeyPress>", self._apenas_numeros)
 
-        self.minutos = ctk.CTkEntry(footer, placeholder_text="Minutos", width=80)
+        self.minutos = ctk.CTkEntry(inner_footer, placeholder_text="Minutos", width=80,
+            fg_color=CORES["bg_input"], border_color=CORES["borda"],
+            text_color=CORES["texto_principal"])
         self.minutos.pack(side="left", padx=5)
         self.minutos.bind("<KeyPress>", self._apenas_numeros)
 
-        self.resumo = ctk.CTkLabel(footer, text="Loot NPC: 0 gp  |  Loot Jogador: 0 gp")
-        self.resumo.pack(side="left", padx=20)
+        ctk.CTkButton(inner_footer, text="✅ Finalizar Hunt", width=160,
+            fg_color=CORES["ouro"], hover_color=CORES["ouro_hover"],
+            text_color="#1a1a1a", font=ctk.CTkFont(size=13, weight="bold"),
+            command=self._finalizar).pack(side="right")
 
-        ctk.CTkButton(footer, text="Finalizar Hunt", width=160,
-            command=self._finalizar).pack(side="right", padx=5)
-
-    def _apenas_numeros(self, event):
-        if event.char and not event.char.isdigit() and event.keysym not in ("BackSpace", "Delete", "Left", "Right", "Tab"):
-            return "break"
+    def _cabecalho_tabela(self, aba, colunas):
+        header = ctk.CTkFrame(aba, fg_color=CORES["bg_header"], corner_radius=6)
+        header.pack(fill="x", padx=5, pady=(5, 0))
+        for texto, w in colunas:
+            ctk.CTkLabel(header, text=texto,
+                font=ctk.CTkFont(size=12, weight="bold"),
+                text_color=CORES["ouro"], width=w).pack(side="left", padx=8, pady=6)
 
     def _construir_aba_drops(self):
         aba = self.tabs.tab("Drops")
@@ -124,24 +161,25 @@ class TelaHunt(ctk.CTkFrame):
             ao_selecionar=lambda v: self.drop_qtd.focus())
         self.drop_search.pack(side="left", padx=5)
 
-        self.drop_qtd = ctk.CTkEntry(row, placeholder_text="Quantidade", width=100)
+        self.drop_qtd = ctk.CTkEntry(row, placeholder_text="Quantidade", width=100,
+            fg_color=CORES["bg_input"], border_color=CORES["borda"],
+            text_color=CORES["texto_principal"])
         self.drop_qtd.pack(side="left", padx=5)
         self.drop_qtd.bind("<Return>", lambda e: self._adicionar_drop())
         self.drop_qtd.bind("<KeyPress>", self._apenas_numeros)
 
-        ctk.CTkButton(row, text="Adicionar", width=100,
+        ctk.CTkButton(row, text="+ Adicionar", width=110,
+            fg_color=CORES["ouro"], hover_color=CORES["ouro_hover"],
+            text_color="#1a1a1a", font=ctk.CTkFont(size=12, weight="bold"),
             command=self._adicionar_drop).pack(side="left", padx=5)
 
-        self.erro_drop = ctk.CTkLabel(aba, text="", text_color="red")
+        self.erro_drop = ctk.CTkLabel(aba, text="",
+            text_color=CORES["vermelho"], font=ctk.CTkFont(size=12))
         self.erro_drop.pack(anchor="w", padx=5)
 
-        header = ctk.CTkFrame(aba, fg_color="#2b2b2b")
-        header.pack(fill="x", padx=5, pady=(5, 0))
+        self._cabecalho_tabela(aba, [("Item", 180), ("Qtd", 60), ("Preço NPC", 110), ("Preço Jogador", 130), ("", 50)])
 
-        for texto, w in [("Item", 180), ("Qtd", 60), ("Preço NPC", 110), ("Preço Jogador", 130), ("", 50)]:
-            ctk.CTkLabel(header, text=texto, font=ctk.CTkFont(weight="bold"), width=w).pack(side="left", padx=5, pady=4)
-
-        self.lista_drops = ctk.CTkScrollableFrame(aba)
+        self.lista_drops = ctk.CTkScrollableFrame(aba, fg_color="transparent")
         self.lista_drops.pack(fill="both", expand=True, pady=2)
 
     def _construir_aba_gastos(self):
@@ -157,24 +195,25 @@ class TelaHunt(ctk.CTkFrame):
             ao_selecionar=lambda v: self.gasto_qtd.focus())
         self.gasto_search.pack(side="left", padx=5)
 
-        self.gasto_qtd = ctk.CTkEntry(row, placeholder_text="Quantidade", width=120)
+        self.gasto_qtd = ctk.CTkEntry(row, placeholder_text="Quantidade", width=120,
+            fg_color=CORES["bg_input"], border_color=CORES["borda"],
+            text_color=CORES["texto_principal"])
         self.gasto_qtd.pack(side="left", padx=5)
         self.gasto_qtd.bind("<Return>", lambda e: self._adicionar_gasto())
         self.gasto_qtd.bind("<KeyPress>", self._apenas_numeros)
 
-        ctk.CTkButton(row, text="Adicionar", width=100,
+        ctk.CTkButton(row, text="+ Adicionar", width=110,
+            fg_color=CORES["ouro"], hover_color=CORES["ouro_hover"],
+            text_color="#1a1a1a", font=ctk.CTkFont(size=12, weight="bold"),
             command=self._adicionar_gasto).pack(side="left", padx=5)
 
-        self.erro_gasto = ctk.CTkLabel(aba, text="", text_color="red")
+        self.erro_gasto = ctk.CTkLabel(aba, text="",
+            text_color=CORES["vermelho"], font=ctk.CTkFont(size=12))
         self.erro_gasto.pack(anchor="w", padx=5)
 
-        header = ctk.CTkFrame(aba, fg_color="#2b2b2b")
-        header.pack(fill="x", padx=5, pady=(5, 0))
+        self._cabecalho_tabela(aba, [("Item", 260), ("Qtd", 80), ("Preço NPC", 120), ("", 50)])
 
-        for texto, w in [("Item", 260), ("Qtd", 80), ("Preço NPC", 120), ("", 50)]:
-            ctk.CTkLabel(header, text=texto, font=ctk.CTkFont(weight="bold"), width=w).pack(side="left", padx=5, pady=4)
-
-        self.lista_gastos = ctk.CTkScrollableFrame(aba)
+        self.lista_gastos = ctk.CTkScrollableFrame(aba, fg_color="transparent")
         self.lista_gastos.pack(fill="both", expand=True, pady=2)
 
     def _construir_aba_inimigos(self):
@@ -190,25 +229,30 @@ class TelaHunt(ctk.CTkFrame):
             ao_selecionar=lambda v: self.inimigo_qtd.focus())
         self.inimigo_search.pack(side="left", padx=5)
 
-        self.inimigo_qtd = ctk.CTkEntry(row, placeholder_text="Quantidade", width=120)
+        self.inimigo_qtd = ctk.CTkEntry(row, placeholder_text="Quantidade", width=120,
+            fg_color=CORES["bg_input"], border_color=CORES["borda"],
+            text_color=CORES["texto_principal"])
         self.inimigo_qtd.pack(side="left", padx=5)
         self.inimigo_qtd.bind("<Return>", lambda e: self._adicionar_inimigo())
         self.inimigo_qtd.bind("<KeyPress>", self._apenas_numeros)
 
-        ctk.CTkButton(row, text="Adicionar", width=100,
+        ctk.CTkButton(row, text="+ Adicionar", width=110,
+            fg_color=CORES["ouro"], hover_color=CORES["ouro_hover"],
+            text_color="#1a1a1a", font=ctk.CTkFont(size=12, weight="bold"),
             command=self._adicionar_inimigo).pack(side="left", padx=5)
 
-        self.erro_inimigo = ctk.CTkLabel(aba, text="", text_color="red")
+        self.erro_inimigo = ctk.CTkLabel(aba, text="",
+            text_color=CORES["vermelho"], font=ctk.CTkFont(size=12))
         self.erro_inimigo.pack(anchor="w", padx=5)
 
-        header = ctk.CTkFrame(aba, fg_color="#2b2b2b")
-        header.pack(fill="x", padx=5, pady=(5, 0))
+        self._cabecalho_tabela(aba, [("Inimigo", 340), ("Quantidade", 120), ("", 50)])
 
-        for texto, w in [("Inimigo", 340), ("Quantidade", 120), ("", 50)]:
-            ctk.CTkLabel(header, text=texto, font=ctk.CTkFont(weight="bold"), width=w).pack(side="left", padx=5, pady=4)
-
-        self.lista_inimigos = ctk.CTkScrollableFrame(aba)
+        self.lista_inimigos = ctk.CTkScrollableFrame(aba, fg_color="transparent")
         self.lista_inimigos.pack(fill="both", expand=True, pady=2)
+
+    def _apenas_numeros(self, event):
+        if event.char and not event.char.isdigit() and event.keysym not in ("BackSpace", "Delete", "Left", "Right", "Tab"):
+            return "break"
 
     def _adicionar_drop(self):
         nome = self.drop_search.get()
@@ -249,22 +293,31 @@ class TelaHunt(ctk.CTkFrame):
             widget.destroy()
 
         for idx, item in enumerate(self.drops):
-            row = ctk.CTkFrame(self.lista_drops, fg_color="transparent")
-            row.pack(fill="x", pady=2)
+            row = ctk.CTkFrame(self.lista_drops, fg_color=CORES["bg_card"] if idx % 2 == 0 else "transparent",
+                corner_radius=4)
+            row.pack(fill="x", pady=1)
 
-            ctk.CTkLabel(row, text=item["item_nome"], width=180, anchor="w").pack(side="left", padx=5)
-            ctk.CTkLabel(row, text=str(item["quantidade"]), width=60).pack(side="left", padx=5)
-            ctk.CTkLabel(row, text=f"{item['preco_npc']:,}", width=110).pack(side="left", padx=5)
+            ctk.CTkLabel(row, text=item["item_nome"], width=180, anchor="w",
+                text_color=CORES["texto_principal"]).pack(side="left", padx=8)
+            ctk.CTkLabel(row, text=str(item["quantidade"]), width=60,
+                text_color=CORES["texto_principal"]).pack(side="left", padx=5)
+            ctk.CTkLabel(row, text=f"{item['preco_npc']:,}", width=110,
+                text_color=CORES["texto_secundario"]).pack(side="left", padx=5)
 
-            entry_jogador = ctk.CTkEntry(row, width=130)
+            entry_jogador = ctk.CTkEntry(row, width=130,
+                fg_color=CORES["bg_input"], border_color=CORES["borda"],
+                text_color=CORES["ouro"])
             entry_jogador.insert(0, str(item["preco_jogador"]))
             entry_jogador.pack(side="left", padx=5)
             entry_jogador.bind("<KeyPress>", self._apenas_numeros)
             entry_jogador.bind("<FocusOut>", lambda e, i=idx, en=entry_jogador: self._atualizar_preco_jogador(i, en))
 
-            ctk.CTkButton(row, text="🗑", width=40, fg_color="transparent",
-                border_width=1, text_color="red",
-                command=lambda i=idx: self._remover_drop(i)).pack(side="left", padx=5)
+            ctk.CTkButton(row, text="🗑", width=40,
+                fg_color="transparent", border_width=1,
+                border_color=CORES["vermelho"],
+                text_color=CORES["vermelho"],
+                hover_color=CORES["bg_input"],
+                command=lambda i=idx: self._remover_drop(i)).pack(side="left", padx=5, pady=4)
 
     def _remover_drop(self, idx):
         self.drops.pop(idx)
@@ -315,16 +368,23 @@ class TelaHunt(ctk.CTkFrame):
             widget.destroy()
 
         for idx, item in enumerate(self.gastos):
-            row = ctk.CTkFrame(self.lista_gastos, fg_color="transparent")
-            row.pack(fill="x", pady=2)
+            row = ctk.CTkFrame(self.lista_gastos, fg_color=CORES["bg_card"] if idx % 2 == 0 else "transparent",
+                corner_radius=4)
+            row.pack(fill="x", pady=1)
 
-            ctk.CTkLabel(row, text=item["item_nome"], width=260, anchor="w").pack(side="left", padx=5)
-            ctk.CTkLabel(row, text=str(item["quantidade"]), width=80).pack(side="left", padx=5)
-            ctk.CTkLabel(row, text=f"{item['preco_npc']:,}", width=120).pack(side="left", padx=5)
+            ctk.CTkLabel(row, text=item["item_nome"], width=260, anchor="w",
+                text_color=CORES["texto_principal"]).pack(side="left", padx=8)
+            ctk.CTkLabel(row, text=str(item["quantidade"]), width=80,
+                text_color=CORES["texto_principal"]).pack(side="left", padx=5)
+            ctk.CTkLabel(row, text=f"{item['preco_npc']:,}", width=120,
+                text_color=CORES["texto_secundario"]).pack(side="left", padx=5)
 
-            ctk.CTkButton(row, text="🗑", width=40, fg_color="transparent",
-                border_width=1, text_color="red",
-                command=lambda i=idx: self._remover_gasto(i)).pack(side="left", padx=5)
+            ctk.CTkButton(row, text="🗑", width=40,
+                fg_color="transparent", border_width=1,
+                border_color=CORES["vermelho"],
+                text_color=CORES["vermelho"],
+                hover_color=CORES["bg_input"],
+                command=lambda i=idx: self._remover_gasto(i)).pack(side="left", padx=5, pady=4)
 
     def _remover_gasto(self, idx):
         self.gastos.pop(idx)
@@ -364,15 +424,21 @@ class TelaHunt(ctk.CTkFrame):
             widget.destroy()
 
         for idx, item in enumerate(self.inimigos):
-            row = ctk.CTkFrame(self.lista_inimigos, fg_color="transparent")
-            row.pack(fill="x", pady=2)
+            row = ctk.CTkFrame(self.lista_inimigos, fg_color=CORES["bg_card"] if idx % 2 == 0 else "transparent",
+                corner_radius=4)
+            row.pack(fill="x", pady=1)
 
-            ctk.CTkLabel(row, text=item["inimigo_nome"], width=340, anchor="w").pack(side="left", padx=5)
-            ctk.CTkLabel(row, text=str(item["quantidade"]), width=120).pack(side="left", padx=5)
+            ctk.CTkLabel(row, text=item["inimigo_nome"], width=340, anchor="w",
+                text_color=CORES["texto_principal"]).pack(side="left", padx=8)
+            ctk.CTkLabel(row, text=str(item["quantidade"]), width=120,
+                text_color=CORES["texto_principal"]).pack(side="left", padx=5)
 
-            ctk.CTkButton(row, text="🗑", width=40, fg_color="transparent",
-                border_width=1, text_color="red",
-                command=lambda i=idx: self._remover_inimigo(i)).pack(side="left", padx=5)
+            ctk.CTkButton(row, text="🗑", width=40,
+                fg_color="transparent", border_width=1,
+                border_color=CORES["vermelho"],
+                text_color=CORES["vermelho"],
+                hover_color=CORES["bg_input"],
+                command=lambda i=idx: self._remover_inimigo(i)).pack(side="left", padx=5, pady=4)
 
     def _remover_inimigo(self, idx):
         self.inimigos.pop(idx)
@@ -408,22 +474,27 @@ class TelaHunt(ctk.CTkFrame):
         janela.geometry("320x150")
         janela.grab_set()
         janela.resizable(False, False)
+        janela.configure(fg_color=CORES["bg_principal"])
         janela.update_idletasks()
         x = self.master.winfo_x() + (self.master.winfo_width() // 2) - 160
         y = self.master.winfo_y() + (self.master.winfo_height() // 2) - 75
         janela.geometry(f"+{x}+{y}")
 
         ctk.CTkLabel(janela, text=mensagem,
-            font=ctk.CTkFont(size=13), wraplength=280).pack(pady=25)
+            font=ctk.CTkFont(size=13), wraplength=280,
+            text_color=CORES["texto_principal"]).pack(pady=25)
 
         botoes = ctk.CTkFrame(janela, fg_color="transparent")
         botoes.pack()
 
-        ctk.CTkButton(botoes, text="Sair sem salvar", width=130, fg_color="red",
+        ctk.CTkButton(botoes, text="Sair sem salvar", width=130,
+            fg_color=CORES["vermelho"], hover_color=CORES["vermelho_hover"],
             command=lambda: [janela.destroy(), ao_confirmar()]).pack(side="left", padx=10)
 
-        ctk.CTkButton(botoes, text="Cancelar", width=120, fg_color="transparent",
-            border_width=1, command=janela.destroy).pack(side="left", padx=10)
+        ctk.CTkButton(botoes, text="Cancelar", width=120,
+            fg_color="transparent", border_width=1, border_color=CORES["borda"],
+            text_color=CORES["texto_secundario"], hover_color=CORES["bg_input"],
+            command=janela.destroy).pack(side="left", padx=10)
 
     def _restaurar_protocolo(self):
         self.master.protocol("WM_DELETE_WINDOW", self.master.destroy)
@@ -480,39 +551,73 @@ class TelaHunt(ctk.CTkFrame):
         janela.geometry("300x130")
         janela.grab_set()
         janela.resizable(False, False)
+        janela.configure(fg_color=CORES["bg_principal"])
         janela.update_idletasks()
         x = self.master.winfo_x() + (self.master.winfo_width() // 2) - 150
         y = self.master.winfo_y() + (self.master.winfo_height() // 2) - 65
         janela.geometry(f"+{x}+{y}")
 
         ctk.CTkLabel(janela, text=mensagem,
-            font=ctk.CTkFont(size=13), wraplength=260).pack(pady=25)
+            font=ctk.CTkFont(size=13), wraplength=260,
+            text_color=CORES["texto_principal"]).pack(pady=25)
+
         ctk.CTkButton(janela, text="OK", width=120,
+            fg_color=CORES["ouro"], hover_color=CORES["ouro_hover"],
+            text_color="#1a1a1a",
             command=janela.destroy).pack()
 
     def _mostrar_relatorio(self, relatorio):
         janela = ctk.CTkToplevel(self)
         janela.title("Relatório da Hunt")
-        janela.geometry("500x600")
+        janela.geometry("500x620")
         janela.grab_set()
+        janela.configure(fg_color=CORES["bg_principal"])
         janela.update_idletasks()
         x = self.master.winfo_x() + (self.master.winfo_width() // 2) - 250
-        y = self.master.winfo_y() + (self.master.winfo_height() // 2) - 300
+        y = self.master.winfo_y() + (self.master.winfo_height() // 2) - 310
         janela.geometry(f"+{x}+{y}")
 
-        ctk.CTkLabel(janela, text="Resumo da Hunt",
-            font=ctk.CTkFont(size=20, weight="bold")).pack(pady=20)
+        ctk.CTkLabel(janela, text="⚔ Resumo da Hunt",
+            font=ctk.CTkFont(size=20, weight="bold"),
+            text_color=CORES["ouro"]).pack(pady=20)
 
-        texto = ctk.CTkTextbox(janela, width=450, height=400)
-        texto.pack(pady=10)
+        texto = ctk.CTkTextbox(janela, width=450, height=400,
+            fg_color=CORES["bg_card"], border_color=CORES["borda"],
+            text_color=CORES["texto_principal"])
+        texto.pack(pady=10, padx=20)
         texto.insert("end", relatorio)
         texto.configure(state="disabled")
 
-        ctk.CTkButton(janela, text="Copiar", width=200,
-            command=lambda: self._copiar(relatorio)).pack(pady=5)
-        ctk.CTkButton(janela, text="Fechar", width=200,
-            fg_color="transparent", border_width=1,
-            command=lambda: [janela.destroy(), self.ao_finalizar()]).pack(pady=5)
+        botoes = ctk.CTkFrame(janela, fg_color="transparent")
+        botoes.pack(pady=5)
+
+        ctk.CTkButton(botoes, text="📋 Copiar", width=140,
+            fg_color=CORES["ouro"], hover_color=CORES["ouro_hover"],
+            text_color="#1a1a1a", font=ctk.CTkFont(size=12, weight="bold"),
+            command=lambda: self._copiar(relatorio)).pack(side="left", padx=5)
+
+        ctk.CTkButton(botoes, text="💾 Salvar .txt", width=140,
+            fg_color="transparent", border_width=1, border_color=CORES["ouro"],
+            text_color=CORES["ouro"], hover_color=CORES["bg_input"],
+            command=lambda: self._salvar_txt(relatorio, self.personagem["nome"])).pack(side="left", padx=5)
+
+        ctk.CTkButton(botoes, text="Fechar", width=140,
+            fg_color="transparent", border_width=1, border_color=CORES["borda"],
+            text_color=CORES["texto_secundario"], hover_color=CORES["bg_input"],
+            command=lambda: [janela.destroy(), self.ao_finalizar()]).pack(side="left", padx=5)
+
+    def _salvar_txt(self, relatorio, nome_personagem):
+        from tkinter import filedialog
+        from datetime import datetime
+        nome_arquivo = f"hunt_{nome_personagem}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+        caminho = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[("Texto", "*.txt")],
+            initialfile=nome_arquivo
+        )
+        if caminho:
+            with open(caminho, "w", encoding="utf-8") as f:
+                f.write(relatorio)
 
     def _copiar(self, texto):
         self.clipboard_clear()

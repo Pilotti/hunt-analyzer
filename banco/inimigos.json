@@ -1,7 +1,3077 @@
 [
-    {"nome": "Bulbasaur"},
-    {"nome": "Charmander"},
-    {"nome": "Squirtle"},
-    {"nome": "Pidgey"},
-    {"nome": "Rattata"}
+    {
+        "nome": "0001 - Bulbasaur"
+    },
+    {
+        "nome": "0002 - Ivysaur"
+    },
+    {
+        "nome": "0003 - Venusaur"
+    },
+    {
+        "nome": "0004 - Charmander"
+    },
+    {
+        "nome": "0005 - Charmeleon"
+    },
+    {
+        "nome": "0006 - Charizard"
+    },
+    {
+        "nome": "0007 - Squirtle"
+    },
+    {
+        "nome": "0008 - Wartortle"
+    },
+    {
+        "nome": "0009 - Blastoise"
+    },
+    {
+        "nome": "0010 - Caterpie"
+    },
+    {
+        "nome": "0011 - Metapod"
+    },
+    {
+        "nome": "0012 - Butterfree"
+    },
+    {
+        "nome": "0013 - Weedle"
+    },
+    {
+        "nome": "0014 - Kakuna"
+    },
+    {
+        "nome": "0015 - Beedrill"
+    },
+    {
+        "nome": "0016 - Pidgey"
+    },
+    {
+        "nome": "0017 - Pidgeotto"
+    },
+    {
+        "nome": "0018 - Pidgeot"
+    },
+    {
+        "nome": "0019 - Rattata"
+    },
+    {
+        "nome": "0020 - Raticate"
+    },
+    {
+        "nome": "0021 - Spearow"
+    },
+    {
+        "nome": "0022 - Fearow"
+    },
+    {
+        "nome": "0023 - Ekans"
+    },
+    {
+        "nome": "0024 - Arbok"
+    },
+    {
+        "nome": "0025 - Pikachu"
+    },
+    {
+        "nome": "0026 - Raichu"
+    },
+    {
+        "nome": "0027 - Sandshrew"
+    },
+    {
+        "nome": "0028 - Sandslash"
+    },
+    {
+        "nome": "0029 - Nidoran♀"
+    },
+    {
+        "nome": "0030 - Nidorina"
+    },
+    {
+        "nome": "0031 - Nidoqueen"
+    },
+    {
+        "nome": "0032 - Nidoran♂"
+    },
+    {
+        "nome": "0033 - Nidorino"
+    },
+    {
+        "nome": "0034 - Nidoking"
+    },
+    {
+        "nome": "0035 - Clefairy"
+    },
+    {
+        "nome": "0036 - Clefable"
+    },
+    {
+        "nome": "0037 - Vulpix"
+    },
+    {
+        "nome": "0038 - Ninetales"
+    },
+    {
+        "nome": "0039 - Jigglypuff"
+    },
+    {
+        "nome": "0040 - Wigglytuff"
+    },
+    {
+        "nome": "0041 - Zubat"
+    },
+    {
+        "nome": "0042 - Golbat"
+    },
+    {
+        "nome": "0043 - Oddish"
+    },
+    {
+        "nome": "0044 - Gloom"
+    },
+    {
+        "nome": "0045 - Vileplume"
+    },
+    {
+        "nome": "0046 - Paras"
+    },
+    {
+        "nome": "0047 - Parasect"
+    },
+    {
+        "nome": "0048 - Venonat"
+    },
+    {
+        "nome": "0049 - Venomoth"
+    },
+    {
+        "nome": "0050 - Diglett"
+    },
+    {
+        "nome": "0051 - Dugtrio"
+    },
+    {
+        "nome": "0052 - Meowth"
+    },
+    {
+        "nome": "0053 - Persian"
+    },
+    {
+        "nome": "0054 - Psyduck"
+    },
+    {
+        "nome": "0055 - Golduck"
+    },
+    {
+        "nome": "0056 - Mankey"
+    },
+    {
+        "nome": "0057 - Primeape"
+    },
+    {
+        "nome": "0058 - Growlithe"
+    },
+    {
+        "nome": "0059 - Arcanine"
+    },
+    {
+        "nome": "0060 - Poliwag"
+    },
+    {
+        "nome": "0061 - Poliwhirl"
+    },
+    {
+        "nome": "0062 - Poliwrath"
+    },
+    {
+        "nome": "0063 - Abra"
+    },
+    {
+        "nome": "0064 - Kadabra"
+    },
+    {
+        "nome": "0065 - Alakazam"
+    },
+    {
+        "nome": "0066 - Machop"
+    },
+    {
+        "nome": "0067 - Machoke"
+    },
+    {
+        "nome": "0068 - Machamp"
+    },
+    {
+        "nome": "0069 - Bellsprout"
+    },
+    {
+        "nome": "0070 - Weepinbell"
+    },
+    {
+        "nome": "0071 - Victreebel"
+    },
+    {
+        "nome": "0072 - Tentacool"
+    },
+    {
+        "nome": "0073 - Tentacruel"
+    },
+    {
+        "nome": "0074 - Geodude"
+    },
+    {
+        "nome": "0075 - Graveler"
+    },
+    {
+        "nome": "0076 - Golem"
+    },
+    {
+        "nome": "0077 - Ponyta"
+    },
+    {
+        "nome": "0078 - Rapidash"
+    },
+    {
+        "nome": "0079 - Slowpoke"
+    },
+    {
+        "nome": "0080 - Slowbro"
+    },
+    {
+        "nome": "0081 - Magnemite"
+    },
+    {
+        "nome": "0082 - Magneton"
+    },
+    {
+        "nome": "0083 - Farfetch’d"
+    },
+    {
+        "nome": "0084 - Doduo"
+    },
+    {
+        "nome": "0085 - Dodrio"
+    },
+    {
+        "nome": "0086 - Seel"
+    },
+    {
+        "nome": "0087 - Dewgong"
+    },
+    {
+        "nome": "0088 - Grimer"
+    },
+    {
+        "nome": "0089 - Muk"
+    },
+    {
+        "nome": "0090 - Shellder"
+    },
+    {
+        "nome": "0091 - Cloyster"
+    },
+    {
+        "nome": "0092 - Gastly"
+    },
+    {
+        "nome": "0093 - Haunter"
+    },
+    {
+        "nome": "0094 - Gengar"
+    },
+    {
+        "nome": "0095 - Onix"
+    },
+    {
+        "nome": "0096 - Drowzee"
+    },
+    {
+        "nome": "0097 - Hypno"
+    },
+    {
+        "nome": "0098 - Krabby"
+    },
+    {
+        "nome": "0099 - Kingler"
+    },
+    {
+        "nome": "0100 - Voltorb"
+    },
+    {
+        "nome": "0101 - Electrode"
+    },
+    {
+        "nome": "0102 - Exeggcute"
+    },
+    {
+        "nome": "0103 - Exeggutor"
+    },
+    {
+        "nome": "0104 - Cubone"
+    },
+    {
+        "nome": "0105 - Marowak"
+    },
+    {
+        "nome": "0106 - Hitmonlee"
+    },
+    {
+        "nome": "0107 - Hitmonchan"
+    },
+    {
+        "nome": "0108 - Lickitung"
+    },
+    {
+        "nome": "0109 - Koffing"
+    },
+    {
+        "nome": "0110 - Weezing"
+    },
+    {
+        "nome": "0111 - Rhyhorn"
+    },
+    {
+        "nome": "0112 - Rhydon"
+    },
+    {
+        "nome": "0113 - Chansey"
+    },
+    {
+        "nome": "0114 - Tangela"
+    },
+    {
+        "nome": "0115 - Kangaskhan"
+    },
+    {
+        "nome": "0116 - Horsea"
+    },
+    {
+        "nome": "0117 - Seadra"
+    },
+    {
+        "nome": "0118 - Goldeen"
+    },
+    {
+        "nome": "0119 - Seaking"
+    },
+    {
+        "nome": "0120 - Staryu"
+    },
+    {
+        "nome": "0121 - Starmie"
+    },
+    {
+        "nome": "0122 - Mr. Mime"
+    },
+    {
+        "nome": "0123 - Scyther"
+    },
+    {
+        "nome": "0124 - Jynx"
+    },
+    {
+        "nome": "0125 - Electabuzz"
+    },
+    {
+        "nome": "0126 - Magmar"
+    },
+    {
+        "nome": "0127 - Pinsir"
+    },
+    {
+        "nome": "0128 - Tauros"
+    },
+    {
+        "nome": "0129 - Magikarp"
+    },
+    {
+        "nome": "0130 - Gyarados"
+    },
+    {
+        "nome": "0131 - Lapras"
+    },
+    {
+        "nome": "0132 - Ditto"
+    },
+    {
+        "nome": "0133 - Eevee"
+    },
+    {
+        "nome": "0134 - Vaporeon"
+    },
+    {
+        "nome": "0135 - Jolteon"
+    },
+    {
+        "nome": "0136 - Flareon"
+    },
+    {
+        "nome": "0137 - Porygon"
+    },
+    {
+        "nome": "0138 - Omanyte"
+    },
+    {
+        "nome": "0139 - Omastar"
+    },
+    {
+        "nome": "0140 - Kabuto"
+    },
+    {
+        "nome": "0141 - Kabutops"
+    },
+    {
+        "nome": "0142 - Aerodactyl"
+    },
+    {
+        "nome": "0143 - Snorlax"
+    },
+    {
+        "nome": "0144 - Articuno"
+    },
+    {
+        "nome": "0145 - Zapdos"
+    },
+    {
+        "nome": "0146 - Moltres"
+    },
+    {
+        "nome": "0147 - Dratini"
+    },
+    {
+        "nome": "0148 - Dragonair"
+    },
+    {
+        "nome": "0149 - Dragonite"
+    },
+    {
+        "nome": "0150 - Mewtwo"
+    },
+    {
+        "nome": "0151 - Mew"
+    },
+    {
+        "nome": "0152 - Chikorita"
+    },
+    {
+        "nome": "0153 - Bayleef"
+    },
+    {
+        "nome": "0154 - Meganium"
+    },
+    {
+        "nome": "0155 - Cyndaquil"
+    },
+    {
+        "nome": "0156 - Quilava"
+    },
+    {
+        "nome": "0157 - Typhlosion"
+    },
+    {
+        "nome": "0158 - Totodile"
+    },
+    {
+        "nome": "0159 - Croconaw"
+    },
+    {
+        "nome": "0160 - Feraligatr"
+    },
+    {
+        "nome": "0161 - Sentret"
+    },
+    {
+        "nome": "0162 - Furret"
+    },
+    {
+        "nome": "0163 - Hoothoot"
+    },
+    {
+        "nome": "0164 - Noctowl"
+    },
+    {
+        "nome": "0165 - Ledyba"
+    },
+    {
+        "nome": "0166 - Ledian"
+    },
+    {
+        "nome": "0167 - Spinarak"
+    },
+    {
+        "nome": "0168 - Ariados"
+    },
+    {
+        "nome": "0169 - Crobat"
+    },
+    {
+        "nome": "0170 - Chinchou"
+    },
+    {
+        "nome": "0171 - Lanturn"
+    },
+    {
+        "nome": "0172 - Pichu"
+    },
+    {
+        "nome": "0173 - Cleffa"
+    },
+    {
+        "nome": "0174 - Igglybuff"
+    },
+    {
+        "nome": "0175 - Togepi"
+    },
+    {
+        "nome": "0176 - Togetic"
+    },
+    {
+        "nome": "0177 - Natu"
+    },
+    {
+        "nome": "0178 - Xatu"
+    },
+    {
+        "nome": "0179 - Mareep"
+    },
+    {
+        "nome": "0180 - Flaaffy"
+    },
+    {
+        "nome": "0181 - Ampharos"
+    },
+    {
+        "nome": "0182 - Bellossom"
+    },
+    {
+        "nome": "0183 - Marill"
+    },
+    {
+        "nome": "0184 - Azumarill"
+    },
+    {
+        "nome": "0185 - Sudowoodo"
+    },
+    {
+        "nome": "0186 - Politoed"
+    },
+    {
+        "nome": "0187 - Hoppip"
+    },
+    {
+        "nome": "0188 - Skiploom"
+    },
+    {
+        "nome": "0189 - Jumpluff"
+    },
+    {
+        "nome": "0190 - Aipom"
+    },
+    {
+        "nome": "0191 - Sunkern"
+    },
+    {
+        "nome": "0192 - Sunflora"
+    },
+    {
+        "nome": "0193 - Yanma"
+    },
+    {
+        "nome": "0194 - Wooper"
+    },
+    {
+        "nome": "0195 - Quagsire"
+    },
+    {
+        "nome": "0196 - Espeon"
+    },
+    {
+        "nome": "0197 - Umbreon"
+    },
+    {
+        "nome": "0198 - Murkrow"
+    },
+    {
+        "nome": "0199 - Slowking"
+    },
+    {
+        "nome": "0200 - Misdreavus"
+    },
+    {
+        "nome": "0201 - Unown"
+    },
+    {
+        "nome": "0202 - Wobbuffet"
+    },
+    {
+        "nome": "0203 - Girafarig"
+    },
+    {
+        "nome": "0204 - Pineco"
+    },
+    {
+        "nome": "0205 - Forretress"
+    },
+    {
+        "nome": "0206 - Dunsparce"
+    },
+    {
+        "nome": "0207 - Gligar"
+    },
+    {
+        "nome": "0208 - Steelix"
+    },
+    {
+        "nome": "0209 - Snubbull"
+    },
+    {
+        "nome": "0210 - Granbull"
+    },
+    {
+        "nome": "0211 - Qwilfish"
+    },
+    {
+        "nome": "0212 - Scizor"
+    },
+    {
+        "nome": "0213 - Shuckle"
+    },
+    {
+        "nome": "0214 - Heracross"
+    },
+    {
+        "nome": "0215 - Sneasel"
+    },
+    {
+        "nome": "0216 - Teddiursa"
+    },
+    {
+        "nome": "0217 - Ursaring"
+    },
+    {
+        "nome": "0218 - Slugma"
+    },
+    {
+        "nome": "0219 - Magcargo"
+    },
+    {
+        "nome": "0220 - Swinub"
+    },
+    {
+        "nome": "0221 - Piloswine"
+    },
+    {
+        "nome": "0222 - Corsola"
+    },
+    {
+        "nome": "0223 - Remoraid"
+    },
+    {
+        "nome": "0224 - Octillery"
+    },
+    {
+        "nome": "0225 - Delibird"
+    },
+    {
+        "nome": "0226 - Mantine"
+    },
+    {
+        "nome": "0227 - Skarmory"
+    },
+    {
+        "nome": "0228 - Houndour"
+    },
+    {
+        "nome": "0229 - Houndoom"
+    },
+    {
+        "nome": "0230 - Kingdra"
+    },
+    {
+        "nome": "0231 - Phanpy"
+    },
+    {
+        "nome": "0232 - Donphan"
+    },
+    {
+        "nome": "0233 - Porygon2"
+    },
+    {
+        "nome": "0234 - Stantler"
+    },
+    {
+        "nome": "0235 - Smeargle"
+    },
+    {
+        "nome": "0236 - Tyrogue"
+    },
+    {
+        "nome": "0237 - Hitmontop"
+    },
+    {
+        "nome": "0238 - Smoochum"
+    },
+    {
+        "nome": "0239 - Elekid"
+    },
+    {
+        "nome": "0240 - Magby"
+    },
+    {
+        "nome": "0241 - Miltank"
+    },
+    {
+        "nome": "0242 - Blissey"
+    },
+    {
+        "nome": "0243 - Raikou"
+    },
+    {
+        "nome": "0244 - Entei"
+    },
+    {
+        "nome": "0245 - Suicune"
+    },
+    {
+        "nome": "0246 - Larvitar"
+    },
+    {
+        "nome": "0247 - Pupitar"
+    },
+    {
+        "nome": "0248 - Tyranitar"
+    },
+    {
+        "nome": "0249 - Lugia"
+    },
+    {
+        "nome": "0250 - Ho-Oh"
+    },
+    {
+        "nome": "0251 - Celebi"
+    },
+    {
+        "nome": "0252 - Treecko"
+    },
+    {
+        "nome": "0253 - Grovyle"
+    },
+    {
+        "nome": "0254 - Sceptile"
+    },
+    {
+        "nome": "0255 - Torchic"
+    },
+    {
+        "nome": "0256 - Combusken"
+    },
+    {
+        "nome": "0257 - Blaziken"
+    },
+    {
+        "nome": "0258 - Mudkip"
+    },
+    {
+        "nome": "0259 - Marshtomp"
+    },
+    {
+        "nome": "0260 - Swampert"
+    },
+    {
+        "nome": "0261 - Poochyena"
+    },
+    {
+        "nome": "0262 - Mightyena"
+    },
+    {
+        "nome": "0263 - Zigzagoon"
+    },
+    {
+        "nome": "0264 - Linoone"
+    },
+    {
+        "nome": "0265 - Wurmple"
+    },
+    {
+        "nome": "0266 - Silcoon"
+    },
+    {
+        "nome": "0267 - Beautifly"
+    },
+    {
+        "nome": "0268 - Cascoon"
+    },
+    {
+        "nome": "0269 - Dustox"
+    },
+    {
+        "nome": "0270 - Lotad"
+    },
+    {
+        "nome": "0271 - Lombre"
+    },
+    {
+        "nome": "0272 - Ludicolo"
+    },
+    {
+        "nome": "0273 - Seedot"
+    },
+    {
+        "nome": "0274 - Nuzleaf"
+    },
+    {
+        "nome": "0275 - Shiftry"
+    },
+    {
+        "nome": "0276 - Taillow"
+    },
+    {
+        "nome": "0277 - Swellow"
+    },
+    {
+        "nome": "0278 - Wingull"
+    },
+    {
+        "nome": "0279 - Pelipper"
+    },
+    {
+        "nome": "0280 - Ralts"
+    },
+    {
+        "nome": "0281 - Kirlia"
+    },
+    {
+        "nome": "0282 - Gardevoir"
+    },
+    {
+        "nome": "0283 - Surskit"
+    },
+    {
+        "nome": "0284 - Masquerain"
+    },
+    {
+        "nome": "0285 - Shroomish"
+    },
+    {
+        "nome": "0286 - Breloom"
+    },
+    {
+        "nome": "0287 - Slakoth"
+    },
+    {
+        "nome": "0288 - Vigoroth"
+    },
+    {
+        "nome": "0289 - Slaking"
+    },
+    {
+        "nome": "0290 - Nincada"
+    },
+    {
+        "nome": "0291 - Ninjask"
+    },
+    {
+        "nome": "0292 - Shedinja"
+    },
+    {
+        "nome": "0293 - Whismur"
+    },
+    {
+        "nome": "0294 - Loudred"
+    },
+    {
+        "nome": "0295 - Exploud"
+    },
+    {
+        "nome": "0296 - Makuhita"
+    },
+    {
+        "nome": "0297 - Hariyama"
+    },
+    {
+        "nome": "0298 - Azurill"
+    },
+    {
+        "nome": "0299 - Nosepass"
+    },
+    {
+        "nome": "0300 - Skitty"
+    },
+    {
+        "nome": "0301 - Delcatty"
+    },
+    {
+        "nome": "0302 - Sableye"
+    },
+    {
+        "nome": "0303 - Mawile"
+    },
+    {
+        "nome": "0304 - Aron"
+    },
+    {
+        "nome": "0305 - Lairon"
+    },
+    {
+        "nome": "0306 - Aggron"
+    },
+    {
+        "nome": "0307 - Meditite"
+    },
+    {
+        "nome": "0308 - Medicham"
+    },
+    {
+        "nome": "0309 - Electrike"
+    },
+    {
+        "nome": "0310 - Manectric"
+    },
+    {
+        "nome": "0311 - Plusle"
+    },
+    {
+        "nome": "0312 - Minun"
+    },
+    {
+        "nome": "0313 - Volbeat"
+    },
+    {
+        "nome": "0314 - Illumise"
+    },
+    {
+        "nome": "0315 - Roselia"
+    },
+    {
+        "nome": "0316 - Gulpin"
+    },
+    {
+        "nome": "0317 - Swalot"
+    },
+    {
+        "nome": "0318 - Carvanha"
+    },
+    {
+        "nome": "0319 - Sharpedo"
+    },
+    {
+        "nome": "0320 - Wailmer"
+    },
+    {
+        "nome": "0321 - Wailord"
+    },
+    {
+        "nome": "0322 - Numel"
+    },
+    {
+        "nome": "0323 - Camerupt"
+    },
+    {
+        "nome": "0324 - Torkoal"
+    },
+    {
+        "nome": "0325 - Spoink"
+    },
+    {
+        "nome": "0326 - Grumpig"
+    },
+    {
+        "nome": "0327 - Spinda"
+    },
+    {
+        "nome": "0328 - Trapinch"
+    },
+    {
+        "nome": "0329 - Vibrava"
+    },
+    {
+        "nome": "0330 - Flygon"
+    },
+    {
+        "nome": "0331 - Cacnea"
+    },
+    {
+        "nome": "0332 - Cacturne"
+    },
+    {
+        "nome": "0333 - Swablu"
+    },
+    {
+        "nome": "0334 - Altaria"
+    },
+    {
+        "nome": "0335 - Zangoose"
+    },
+    {
+        "nome": "0336 - Seviper"
+    },
+    {
+        "nome": "0337 - Lunatone"
+    },
+    {
+        "nome": "0338 - Solrock"
+    },
+    {
+        "nome": "0339 - Barboach"
+    },
+    {
+        "nome": "0340 - Whiscash"
+    },
+    {
+        "nome": "0341 - Corphish"
+    },
+    {
+        "nome": "0342 - Crawdaunt"
+    },
+    {
+        "nome": "0343 - Baltoy"
+    },
+    {
+        "nome": "0344 - Claydol"
+    },
+    {
+        "nome": "0345 - Lileep"
+    },
+    {
+        "nome": "0346 - Cradily"
+    },
+    {
+        "nome": "0347 - Anorith"
+    },
+    {
+        "nome": "0348 - Armaldo"
+    },
+    {
+        "nome": "0349 - Feebas"
+    },
+    {
+        "nome": "0350 - Milotic"
+    },
+    {
+        "nome": "0351 - Castform"
+    },
+    {
+        "nome": "0352 - Kecleon"
+    },
+    {
+        "nome": "0353 - Shuppet"
+    },
+    {
+        "nome": "0354 - Banette"
+    },
+    {
+        "nome": "0355 - Duskull"
+    },
+    {
+        "nome": "0356 - Dusclops"
+    },
+    {
+        "nome": "0357 - Tropius"
+    },
+    {
+        "nome": "0358 - Chimecho"
+    },
+    {
+        "nome": "0359 - Absol"
+    },
+    {
+        "nome": "0360 - Wynaut"
+    },
+    {
+        "nome": "0361 - Snorunt"
+    },
+    {
+        "nome": "0362 - Glalie"
+    },
+    {
+        "nome": "0363 - Spheal"
+    },
+    {
+        "nome": "0364 - Sealeo"
+    },
+    {
+        "nome": "0365 - Walrein"
+    },
+    {
+        "nome": "0366 - Clamperl"
+    },
+    {
+        "nome": "0367 - Huntail"
+    },
+    {
+        "nome": "0368 - Gorebyss"
+    },
+    {
+        "nome": "0369 - Relicanth"
+    },
+    {
+        "nome": "0370 - Luvdisc"
+    },
+    {
+        "nome": "0371 - Bagon"
+    },
+    {
+        "nome": "0372 - Shelgon"
+    },
+    {
+        "nome": "0373 - Salamence"
+    },
+    {
+        "nome": "0374 - Beldum"
+    },
+    {
+        "nome": "0375 - Metang"
+    },
+    {
+        "nome": "0376 - Metagross"
+    },
+    {
+        "nome": "0377 - Regirock"
+    },
+    {
+        "nome": "0378 - Regice"
+    },
+    {
+        "nome": "0379 - Registeel"
+    },
+    {
+        "nome": "0380 - Latias"
+    },
+    {
+        "nome": "0381 - Latios"
+    },
+    {
+        "nome": "0382 - Kyogre"
+    },
+    {
+        "nome": "0383 - Groudon"
+    },
+    {
+        "nome": "0384 - Rayquaza"
+    },
+    {
+        "nome": "0385 - Jirachi"
+    },
+    {
+        "nome": "0386 - Deoxys"
+    },
+    {
+        "nome": "0387 - Turtwig"
+    },
+    {
+        "nome": "0388 - Grotle"
+    },
+    {
+        "nome": "0389 - Torterra"
+    },
+    {
+        "nome": "0390 - Chimchar"
+    },
+    {
+        "nome": "0391 - Monferno"
+    },
+    {
+        "nome": "0392 - Infernape"
+    },
+    {
+        "nome": "0393 - Piplup"
+    },
+    {
+        "nome": "0394 - Prinplup"
+    },
+    {
+        "nome": "0395 - Empoleon"
+    },
+    {
+        "nome": "0396 - Starly"
+    },
+    {
+        "nome": "0397 - Staravia"
+    },
+    {
+        "nome": "0398 - Staraptor"
+    },
+    {
+        "nome": "0399 - Bidoof"
+    },
+    {
+        "nome": "0400 - Bibarel"
+    },
+    {
+        "nome": "0401 - Kricketot"
+    },
+    {
+        "nome": "0402 - Kricketune"
+    },
+    {
+        "nome": "0403 - Shinx"
+    },
+    {
+        "nome": "0404 - Luxio"
+    },
+    {
+        "nome": "0405 - Luxray"
+    },
+    {
+        "nome": "0406 - Budew"
+    },
+    {
+        "nome": "0407 - Roserade"
+    },
+    {
+        "nome": "0408 - Cranidos"
+    },
+    {
+        "nome": "0409 - Rampardos"
+    },
+    {
+        "nome": "0410 - Shieldon"
+    },
+    {
+        "nome": "0411 - Bastiodon"
+    },
+    {
+        "nome": "0412 - Burmy"
+    },
+    {
+        "nome": "0413 - Wormadam"
+    },
+    {
+        "nome": "0414 - Mothim"
+    },
+    {
+        "nome": "0415 - Combee"
+    },
+    {
+        "nome": "0416 - Vespiquen"
+    },
+    {
+        "nome": "0417 - Pachirisu"
+    },
+    {
+        "nome": "0418 - Buizel"
+    },
+    {
+        "nome": "0419 - Floatzel"
+    },
+    {
+        "nome": "0420 - Cherubi"
+    },
+    {
+        "nome": "0421 - Cherrim"
+    },
+    {
+        "nome": "0422 - Shellos"
+    },
+    {
+        "nome": "0423 - Gastrodon"
+    },
+    {
+        "nome": "0424 - Ambipom"
+    },
+    {
+        "nome": "0425 - Drifloon"
+    },
+    {
+        "nome": "0426 - Drifblim"
+    },
+    {
+        "nome": "0427 - Buneary"
+    },
+    {
+        "nome": "0428 - Lopunny"
+    },
+    {
+        "nome": "0429 - Mismagius"
+    },
+    {
+        "nome": "0430 - Honchkrow"
+    },
+    {
+        "nome": "0431 - Glameow"
+    },
+    {
+        "nome": "0432 - Purugly"
+    },
+    {
+        "nome": "0433 - Chingling"
+    },
+    {
+        "nome": "0434 - Stunky"
+    },
+    {
+        "nome": "0435 - Skuntank"
+    },
+    {
+        "nome": "0436 - Bronzor"
+    },
+    {
+        "nome": "0437 - Bronzong"
+    },
+    {
+        "nome": "0438 - Bonsly"
+    },
+    {
+        "nome": "0439 - Mime Jr."
+    },
+    {
+        "nome": "0440 - Happiny"
+    },
+    {
+        "nome": "0441 - Chatot"
+    },
+    {
+        "nome": "0442 - Spiritomb"
+    },
+    {
+        "nome": "0443 - Gible"
+    },
+    {
+        "nome": "0444 - Gabite"
+    },
+    {
+        "nome": "0445 - Garchomp"
+    },
+    {
+        "nome": "0446 - Munchlax"
+    },
+    {
+        "nome": "0447 - Riolu"
+    },
+    {
+        "nome": "0448 - Lucario"
+    },
+    {
+        "nome": "0449 - Hippopotas"
+    },
+    {
+        "nome": "0450 - Hippowdon"
+    },
+    {
+        "nome": "0451 - Skorupi"
+    },
+    {
+        "nome": "0452 - Drapion"
+    },
+    {
+        "nome": "0453 - Croagunk"
+    },
+    {
+        "nome": "0454 - Toxicroak"
+    },
+    {
+        "nome": "0455 - Carnivine"
+    },
+    {
+        "nome": "0456 - Finneon"
+    },
+    {
+        "nome": "0457 - Lumineon"
+    },
+    {
+        "nome": "0458 - Mantyke"
+    },
+    {
+        "nome": "0459 - Snover"
+    },
+    {
+        "nome": "0460 - Abomasnow"
+    },
+    {
+        "nome": "0461 - Weavile"
+    },
+    {
+        "nome": "0462 - Magnezone"
+    },
+    {
+        "nome": "0463 - Lickilicky"
+    },
+    {
+        "nome": "0464 - Rhyperior"
+    },
+    {
+        "nome": "0465 - Tangrowth"
+    },
+    {
+        "nome": "0466 - Electivire"
+    },
+    {
+        "nome": "0467 - Magmortar"
+    },
+    {
+        "nome": "0468 - Togekiss"
+    },
+    {
+        "nome": "0469 - Yanmega"
+    },
+    {
+        "nome": "0470 - Leafeon"
+    },
+    {
+        "nome": "0471 - Glaceon"
+    },
+    {
+        "nome": "0472 - Gliscor"
+    },
+    {
+        "nome": "0473 - Mamoswine"
+    },
+    {
+        "nome": "0474 - Porygon-Z"
+    },
+    {
+        "nome": "0475 - Gallade"
+    },
+    {
+        "nome": "0476 - Probopass"
+    },
+    {
+        "nome": "0477 - Dusknoir"
+    },
+    {
+        "nome": "0478 - Froslass"
+    },
+    {
+        "nome": "0479 - Rotom"
+    },
+    {
+        "nome": "0480 - Uxie"
+    },
+    {
+        "nome": "0481 - Mesprit"
+    },
+    {
+        "nome": "0482 - Azelf"
+    },
+    {
+        "nome": "0483 - Dialga"
+    },
+    {
+        "nome": "0484 - Palkia"
+    },
+    {
+        "nome": "0485 - Heatran"
+    },
+    {
+        "nome": "0486 - Regigigas"
+    },
+    {
+        "nome": "0487 - Giratina"
+    },
+    {
+        "nome": "0488 - Cresselia"
+    },
+    {
+        "nome": "0489 - Phione"
+    },
+    {
+        "nome": "0490 - Manaphy"
+    },
+    {
+        "nome": "0491 - Darkrai"
+    },
+    {
+        "nome": "0492 - Shaymin"
+    },
+    {
+        "nome": "0493 - Arceus"
+    },
+    {
+        "nome": "0494 - Victini"
+    },
+    {
+        "nome": "0495 - Snivy"
+    },
+    {
+        "nome": "0496 - Servine"
+    },
+    {
+        "nome": "0497 - Serperior"
+    },
+    {
+        "nome": "0498 - Tepig"
+    },
+    {
+        "nome": "0499 - Pignite"
+    },
+    {
+        "nome": "0500 - Emboar"
+    },
+    {
+        "nome": "0501 - Oshawott"
+    },
+    {
+        "nome": "0502 - Dewott"
+    },
+    {
+        "nome": "0503 - Samurott"
+    },
+    {
+        "nome": "0504 - Patrat"
+    },
+    {
+        "nome": "0505 - Watchog"
+    },
+    {
+        "nome": "0506 - Lillipup"
+    },
+    {
+        "nome": "0507 - Herdier"
+    },
+    {
+        "nome": "0508 - Stoutland"
+    },
+    {
+        "nome": "0509 - Purrloin"
+    },
+    {
+        "nome": "0510 - Liepard"
+    },
+    {
+        "nome": "0511 - Pansage"
+    },
+    {
+        "nome": "0512 - Simisage"
+    },
+    {
+        "nome": "0513 - Pansear"
+    },
+    {
+        "nome": "0514 - Simisear"
+    },
+    {
+        "nome": "0515 - Panpour"
+    },
+    {
+        "nome": "0516 - Simipour"
+    },
+    {
+        "nome": "0517 - Munna"
+    },
+    {
+        "nome": "0518 - Musharna"
+    },
+    {
+        "nome": "0519 - Pidove"
+    },
+    {
+        "nome": "0520 - Tranquill"
+    },
+    {
+        "nome": "0521 - Unfezant"
+    },
+    {
+        "nome": "0522 - Blitzle"
+    },
+    {
+        "nome": "0523 - Zebstrika"
+    },
+    {
+        "nome": "0524 - Roggenrola"
+    },
+    {
+        "nome": "0525 - Boldore"
+    },
+    {
+        "nome": "0526 - Gigalith"
+    },
+    {
+        "nome": "0527 - Woobat"
+    },
+    {
+        "nome": "0528 - Swoobat"
+    },
+    {
+        "nome": "0529 - Drilbur"
+    },
+    {
+        "nome": "0530 - Excadrill"
+    },
+    {
+        "nome": "0531 - Audino"
+    },
+    {
+        "nome": "0532 - Timburr"
+    },
+    {
+        "nome": "0533 - Gurdurr"
+    },
+    {
+        "nome": "0534 - Conkeldurr"
+    },
+    {
+        "nome": "0535 - Tympole"
+    },
+    {
+        "nome": "0536 - Palpitoad"
+    },
+    {
+        "nome": "0537 - Seismitoad"
+    },
+    {
+        "nome": "0538 - Throh"
+    },
+    {
+        "nome": "0539 - Sawk"
+    },
+    {
+        "nome": "0540 - Sewaddle"
+    },
+    {
+        "nome": "0541 - Swadloon"
+    },
+    {
+        "nome": "0542 - Leavanny"
+    },
+    {
+        "nome": "0543 - Venipede"
+    },
+    {
+        "nome": "0544 - Whirlipede"
+    },
+    {
+        "nome": "0545 - Scolipede"
+    },
+    {
+        "nome": "0546 - Cottonee"
+    },
+    {
+        "nome": "0547 - Whimsicott"
+    },
+    {
+        "nome": "0548 - Petilil"
+    },
+    {
+        "nome": "0549 - Lilligant"
+    },
+    {
+        "nome": "0550 - Basculin"
+    },
+    {
+        "nome": "0551 - Sandile"
+    },
+    {
+        "nome": "0552 - Krokorok"
+    },
+    {
+        "nome": "0553 - Krookodile"
+    },
+    {
+        "nome": "0554 - Darumaka"
+    },
+    {
+        "nome": "0555 - Darmanitan"
+    },
+    {
+        "nome": "0556 - Maractus"
+    },
+    {
+        "nome": "0557 - Dwebble"
+    },
+    {
+        "nome": "0558 - Crustle"
+    },
+    {
+        "nome": "0559 - Scraggy"
+    },
+    {
+        "nome": "0560 - Scrafty"
+    },
+    {
+        "nome": "0561 - Sigilyph"
+    },
+    {
+        "nome": "0562 - Yamask"
+    },
+    {
+        "nome": "0563 - Cofagrigus"
+    },
+    {
+        "nome": "0564 - Tirtouga"
+    },
+    {
+        "nome": "0565 - Carracosta"
+    },
+    {
+        "nome": "0566 - Archen"
+    },
+    {
+        "nome": "0567 - Archeops"
+    },
+    {
+        "nome": "0568 - Trubbish"
+    },
+    {
+        "nome": "0569 - Garbodor"
+    },
+    {
+        "nome": "0570 - Zorua"
+    },
+    {
+        "nome": "0571 - Zoroark"
+    },
+    {
+        "nome": "0572 - Minccino"
+    },
+    {
+        "nome": "0573 - Cinccino"
+    },
+    {
+        "nome": "0574 - Gothita"
+    },
+    {
+        "nome": "0575 - Gothorita"
+    },
+    {
+        "nome": "0576 - Gothitelle"
+    },
+    {
+        "nome": "0577 - Solosis"
+    },
+    {
+        "nome": "0578 - Duosion"
+    },
+    {
+        "nome": "0579 - Reuniclus"
+    },
+    {
+        "nome": "0580 - Ducklett"
+    },
+    {
+        "nome": "0581 - Swanna"
+    },
+    {
+        "nome": "0582 - Vanillite"
+    },
+    {
+        "nome": "0583 - Vanillish"
+    },
+    {
+        "nome": "0584 - Vanilluxe"
+    },
+    {
+        "nome": "0585 - Deerling"
+    },
+    {
+        "nome": "0586 - Sawsbuck"
+    },
+    {
+        "nome": "0587 - Emolga"
+    },
+    {
+        "nome": "0588 - Karrablast"
+    },
+    {
+        "nome": "0589 - Escavalier"
+    },
+    {
+        "nome": "0590 - Foongus"
+    },
+    {
+        "nome": "0591 - Amoonguss"
+    },
+    {
+        "nome": "0592 - Frillish"
+    },
+    {
+        "nome": "0593 - Jellicent"
+    },
+    {
+        "nome": "0594 - Alomomola"
+    },
+    {
+        "nome": "0595 - Joltik"
+    },
+    {
+        "nome": "0596 - Galvantula"
+    },
+    {
+        "nome": "0597 - Ferroseed"
+    },
+    {
+        "nome": "0598 - Ferrothorn"
+    },
+    {
+        "nome": "0599 - Klink"
+    },
+    {
+        "nome": "0600 - Klang"
+    },
+    {
+        "nome": "0601 - Klinklang"
+    },
+    {
+        "nome": "0602 - Tynamo"
+    },
+    {
+        "nome": "0603 - Eelektrik"
+    },
+    {
+        "nome": "0604 - Eelektross"
+    },
+    {
+        "nome": "0605 - Elgyem"
+    },
+    {
+        "nome": "0606 - Beheeyem"
+    },
+    {
+        "nome": "0607 - Litwick"
+    },
+    {
+        "nome": "0608 - Lampent"
+    },
+    {
+        "nome": "0609 - Chandelure"
+    },
+    {
+        "nome": "0610 - Axew"
+    },
+    {
+        "nome": "0611 - Fraxure"
+    },
+    {
+        "nome": "0612 - Haxorus"
+    },
+    {
+        "nome": "0613 - Cubchoo"
+    },
+    {
+        "nome": "0614 - Beartic"
+    },
+    {
+        "nome": "0615 - Cryogonal"
+    },
+    {
+        "nome": "0616 - Shelmet"
+    },
+    {
+        "nome": "0617 - Accelgor"
+    },
+    {
+        "nome": "0618 - Stunfisk"
+    },
+    {
+        "nome": "0619 - Mienfoo"
+    },
+    {
+        "nome": "0620 - Mienshao"
+    },
+    {
+        "nome": "0621 - Druddigon"
+    },
+    {
+        "nome": "0622 - Golett"
+    },
+    {
+        "nome": "0623 - Golurk"
+    },
+    {
+        "nome": "0624 - Pawniard"
+    },
+    {
+        "nome": "0625 - Bisharp"
+    },
+    {
+        "nome": "0626 - Bouffalant"
+    },
+    {
+        "nome": "0627 - Rufflet"
+    },
+    {
+        "nome": "0628 - Braviary"
+    },
+    {
+        "nome": "0629 - Vullaby"
+    },
+    {
+        "nome": "0630 - Mandibuzz"
+    },
+    {
+        "nome": "0631 - Heatmor"
+    },
+    {
+        "nome": "0632 - Durant"
+    },
+    {
+        "nome": "0633 - Deino"
+    },
+    {
+        "nome": "0634 - Zweilous"
+    },
+    {
+        "nome": "0635 - Hydreigon"
+    },
+    {
+        "nome": "0636 - Larvesta"
+    },
+    {
+        "nome": "0637 - Volcarona"
+    },
+    {
+        "nome": "0638 - Cobalion"
+    },
+    {
+        "nome": "0639 - Terrakion"
+    },
+    {
+        "nome": "0640 - Virizion"
+    },
+    {
+        "nome": "0641 - Tornadus"
+    },
+    {
+        "nome": "0642 - Thundurus"
+    },
+    {
+        "nome": "0643 - Reshiram"
+    },
+    {
+        "nome": "0644 - Zekrom"
+    },
+    {
+        "nome": "0645 - Landorus"
+    },
+    {
+        "nome": "0646 - Kyurem"
+    },
+    {
+        "nome": "0647 - Keldeo"
+    },
+    {
+        "nome": "0648 - Meloetta"
+    },
+    {
+        "nome": "0649 - Genesect"
+    },
+    {
+        "nome": "0650 - Chespin"
+    },
+    {
+        "nome": "0651 - Quilladin"
+    },
+    {
+        "nome": "0652 - Chesnaught"
+    },
+    {
+        "nome": "0653 - Fennekin"
+    },
+    {
+        "nome": "0654 - Braixen"
+    },
+    {
+        "nome": "0655 - Delphox"
+    },
+    {
+        "nome": "0656 - Froakie"
+    },
+    {
+        "nome": "0657 - Frogadier"
+    },
+    {
+        "nome": "0658 - Greninja"
+    },
+    {
+        "nome": "0659 - Bunnelby"
+    },
+    {
+        "nome": "0660 - Diggersby"
+    },
+    {
+        "nome": "0661 - Fletchling"
+    },
+    {
+        "nome": "0662 - Fletchinder"
+    },
+    {
+        "nome": "0663 - Talonflame"
+    },
+    {
+        "nome": "0664 - Scatterbug"
+    },
+    {
+        "nome": "0665 - Spewpa"
+    },
+    {
+        "nome": "0666 - Vivillon"
+    },
+    {
+        "nome": "0667 - Litleo"
+    },
+    {
+        "nome": "0668 - Pyroar"
+    },
+    {
+        "nome": "0669 - Flabébé"
+    },
+    {
+        "nome": "0670 - Floette"
+    },
+    {
+        "nome": "0671 - Florges"
+    },
+    {
+        "nome": "0672 - Skiddo"
+    },
+    {
+        "nome": "0673 - Gogoat"
+    },
+    {
+        "nome": "0674 - Pancham"
+    },
+    {
+        "nome": "0675 - Pangoro"
+    },
+    {
+        "nome": "0676 - Furfrou"
+    },
+    {
+        "nome": "0677 - Espurr"
+    },
+    {
+        "nome": "0678 - Meowstic"
+    },
+    {
+        "nome": "0679 - Honedge"
+    },
+    {
+        "nome": "0680 - Doublade"
+    },
+    {
+        "nome": "0681 - Aegislash"
+    },
+    {
+        "nome": "0682 - Spritzee"
+    },
+    {
+        "nome": "0683 - Aromatisse"
+    },
+    {
+        "nome": "0684 - Swirlix"
+    },
+    {
+        "nome": "0685 - Slurpuff"
+    },
+    {
+        "nome": "0686 - Inkay"
+    },
+    {
+        "nome": "0687 - Malamar"
+    },
+    {
+        "nome": "0688 - Binacle"
+    },
+    {
+        "nome": "0689 - Barbaracle"
+    },
+    {
+        "nome": "0690 - Skrelp"
+    },
+    {
+        "nome": "0691 - Dragalge"
+    },
+    {
+        "nome": "0692 - Clauncher"
+    },
+    {
+        "nome": "0693 - Clawitzer"
+    },
+    {
+        "nome": "0694 - Helioptile"
+    },
+    {
+        "nome": "0695 - Heliolisk"
+    },
+    {
+        "nome": "0696 - Tyrunt"
+    },
+    {
+        "nome": "0697 - Tyrantrum"
+    },
+    {
+        "nome": "0698 - Amaura"
+    },
+    {
+        "nome": "0699 - Aurorus"
+    },
+    {
+        "nome": "0700 - Sylveon"
+    },
+    {
+        "nome": "0701 - Hawlucha"
+    },
+    {
+        "nome": "0702 - Dedenne"
+    },
+    {
+        "nome": "0703 - Carbink"
+    },
+    {
+        "nome": "0704 - Goomy"
+    },
+    {
+        "nome": "0705 - Sliggoo"
+    },
+    {
+        "nome": "0706 - Goodra"
+    },
+    {
+        "nome": "0707 - Klefki"
+    },
+    {
+        "nome": "0708 - Phantump"
+    },
+    {
+        "nome": "0709 - Trevenant"
+    },
+    {
+        "nome": "0710 - Pumpkaboo"
+    },
+    {
+        "nome": "0711 - Gourgeist"
+    },
+    {
+        "nome": "0712 - Bergmite"
+    },
+    {
+        "nome": "0713 - Avalugg"
+    },
+    {
+        "nome": "0714 - Noibat"
+    },
+    {
+        "nome": "0715 - Noivern"
+    },
+    {
+        "nome": "0716 - Xerneas"
+    },
+    {
+        "nome": "0717 - Yveltal"
+    },
+    {
+        "nome": "0718 - Zygarde"
+    },
+    {
+        "nome": "0719 - Diancie"
+    },
+    {
+        "nome": "0720 - Hoopa"
+    },
+    {
+        "nome": "0721 - Volcanion"
+    },
+    {
+        "nome": "0722 - Rowlet"
+    },
+    {
+        "nome": "0723 - Dartrix"
+    },
+    {
+        "nome": "0724 - Decidueye"
+    },
+    {
+        "nome": "0725 - Litten"
+    },
+    {
+        "nome": "0726 - Torracat"
+    },
+    {
+        "nome": "0727 - Incineroar"
+    },
+    {
+        "nome": "0728 - Popplio"
+    },
+    {
+        "nome": "0729 - Brionne"
+    },
+    {
+        "nome": "0730 - Primarina"
+    },
+    {
+        "nome": "0731 - Pikipek"
+    },
+    {
+        "nome": "0732 - Trumbeak"
+    },
+    {
+        "nome": "0733 - Toucannon"
+    },
+    {
+        "nome": "0734 - Yungoos"
+    },
+    {
+        "nome": "0735 - Gumshoos"
+    },
+    {
+        "nome": "0736 - Grubbin"
+    },
+    {
+        "nome": "0737 - Charjabug"
+    },
+    {
+        "nome": "0738 - Vikavolt"
+    },
+    {
+        "nome": "0739 - Crabrawler"
+    },
+    {
+        "nome": "0740 - Crabominable"
+    },
+    {
+        "nome": "0741 - Oricorio"
+    },
+    {
+        "nome": "0742 - Cutiefly"
+    },
+    {
+        "nome": "0743 - Ribombee"
+    },
+    {
+        "nome": "0744 - Rockruff"
+    },
+    {
+        "nome": "0745 - Lycanroc"
+    },
+    {
+        "nome": "0746 - Wishiwashi"
+    },
+    {
+        "nome": "0747 - Mareanie"
+    },
+    {
+        "nome": "0748 - Toxapex"
+    },
+    {
+        "nome": "0749 - Mudbray"
+    },
+    {
+        "nome": "0750 - Mudsdale"
+    },
+    {
+        "nome": "0751 - Dewpider"
+    },
+    {
+        "nome": "0752 - Araquanid"
+    },
+    {
+        "nome": "0753 - Fomantis"
+    },
+    {
+        "nome": "0754 - Lurantis"
+    },
+    {
+        "nome": "0755 - Morelull"
+    },
+    {
+        "nome": "0756 - Shiinotic"
+    },
+    {
+        "nome": "0757 - Salandit"
+    },
+    {
+        "nome": "0758 - Salazzle"
+    },
+    {
+        "nome": "0759 - Stufful"
+    },
+    {
+        "nome": "0760 - Bewear"
+    },
+    {
+        "nome": "0761 - Bounsweet"
+    },
+    {
+        "nome": "0762 - Steenee"
+    },
+    {
+        "nome": "0763 - Tsareena"
+    },
+    {
+        "nome": "0764 - Comfey"
+    },
+    {
+        "nome": "0765 - Oranguru"
+    },
+    {
+        "nome": "0766 - Passimian"
+    },
+    {
+        "nome": "0767 - Wimpod"
+    },
+    {
+        "nome": "0768 - Golisopod"
+    },
+    {
+        "nome": "0769 - Sandygast"
+    },
+    {
+        "nome": "0770 - Palossand"
+    },
+    {
+        "nome": "0771 - Pyukumuku"
+    },
+    {
+        "nome": "0772 - Type: Null"
+    },
+    {
+        "nome": "0773 - Silvally"
+    },
+    {
+        "nome": "0774 - Minior"
+    },
+    {
+        "nome": "0775 - Komala"
+    },
+    {
+        "nome": "0776 - Turtonator"
+    },
+    {
+        "nome": "0777 - Togedemaru"
+    },
+    {
+        "nome": "0778 - Mimikyu"
+    },
+    {
+        "nome": "0779 - Bruxish"
+    },
+    {
+        "nome": "0780 - Drampa"
+    },
+    {
+        "nome": "0781 - Dhelmise"
+    },
+    {
+        "nome": "0782 - Jangmo-o"
+    },
+    {
+        "nome": "0783 - Hakamo-o"
+    },
+    {
+        "nome": "0784 - Kommo-o"
+    },
+    {
+        "nome": "0785 - Tapu Koko"
+    },
+    {
+        "nome": "0786 - Tapu Lele"
+    },
+    {
+        "nome": "0787 - Tapu Bulu"
+    },
+    {
+        "nome": "0788 - Tapu Fini"
+    },
+    {
+        "nome": "0789 - Cosmog"
+    },
+    {
+        "nome": "0790 - Cosmoem"
+    },
+    {
+        "nome": "0791 - Solgaleo"
+    },
+    {
+        "nome": "0792 - Lunala"
+    },
+    {
+        "nome": "0793 - Nihilego"
+    },
+    {
+        "nome": "0794 - Buzzwole"
+    },
+    {
+        "nome": "0795 - Pheromosa"
+    },
+    {
+        "nome": "0796 - Xurkitree"
+    },
+    {
+        "nome": "0797 - Celesteela"
+    },
+    {
+        "nome": "0798 - Kartana"
+    },
+    {
+        "nome": "0799 - Guzzlord"
+    },
+    {
+        "nome": "0800 - Necrozma"
+    },
+    {
+        "nome": "0801 - Magearna"
+    },
+    {
+        "nome": "0802 - Marshadow"
+    },
+    {
+        "nome": "0803 - Poipole"
+    },
+    {
+        "nome": "0804 - Naganadel"
+    },
+    {
+        "nome": "0805 - Stakataka"
+    },
+    {
+        "nome": "0806 - Blacephalon"
+    },
+    {
+        "nome": "0807 - Zeraora"
+    },
+    {
+        "nome": "0808 - Meltan"
+    },
+    {
+        "nome": "0809 - Melmetal"
+    },
+    {
+        "nome": "0810 - Grookey"
+    },
+    {
+        "nome": "0811 - Thwackey"
+    },
+    {
+        "nome": "0812 - Rillaboom"
+    },
+    {
+        "nome": "0813 - Scorbunny"
+    },
+    {
+        "nome": "0814 - Raboot"
+    },
+    {
+        "nome": "0815 - Cinderace"
+    },
+    {
+        "nome": "0816 - Sobble"
+    },
+    {
+        "nome": "0817 - Drizzile"
+    },
+    {
+        "nome": "0818 - Inteleon"
+    },
+    {
+        "nome": "0819 - Skwovet"
+    },
+    {
+        "nome": "0820 - Greedent"
+    },
+    {
+        "nome": "0821 - Rookidee"
+    },
+    {
+        "nome": "0822 - Corvisquire"
+    },
+    {
+        "nome": "0823 - Corviknight"
+    },
+    {
+        "nome": "0824 - Blipbug"
+    },
+    {
+        "nome": "0825 - Dottler"
+    },
+    {
+        "nome": "0826 - Orbeetle"
+    },
+    {
+        "nome": "0827 - Nickit"
+    },
+    {
+        "nome": "0828 - Thievul"
+    },
+    {
+        "nome": "0829 - Gossifleur"
+    },
+    {
+        "nome": "0830 - Eldegoss"
+    },
+    {
+        "nome": "0831 - Wooloo"
+    },
+    {
+        "nome": "0832 - Dubwool"
+    },
+    {
+        "nome": "0833 - Chewtle"
+    },
+    {
+        "nome": "0834 - Drednaw"
+    },
+    {
+        "nome": "0835 - Yamper"
+    },
+    {
+        "nome": "0836 - Boltund"
+    },
+    {
+        "nome": "0837 - Rolycoly"
+    },
+    {
+        "nome": "0838 - Carkol"
+    },
+    {
+        "nome": "0839 - Coalossal"
+    },
+    {
+        "nome": "0840 - Applin"
+    },
+    {
+        "nome": "0841 - Flapple"
+    },
+    {
+        "nome": "0842 - Appletun"
+    },
+    {
+        "nome": "0843 - Silicobra"
+    },
+    {
+        "nome": "0844 - Sandaconda"
+    },
+    {
+        "nome": "0845 - Cramorant"
+    },
+    {
+        "nome": "0846 - Arrokuda"
+    },
+    {
+        "nome": "0847 - Barraskewda"
+    },
+    {
+        "nome": "0848 - Toxel"
+    },
+    {
+        "nome": "0849 - Toxtricity"
+    },
+    {
+        "nome": "0850 - Sizzlipede"
+    },
+    {
+        "nome": "0851 - Centiskorch"
+    },
+    {
+        "nome": "0852 - Clobbopus"
+    },
+    {
+        "nome": "0853 - Grapploct"
+    },
+    {
+        "nome": "0854 - Sinistea"
+    },
+    {
+        "nome": "0855 - Polteageist"
+    },
+    {
+        "nome": "0856 - Hatenna"
+    },
+    {
+        "nome": "0857 - Hattrem"
+    },
+    {
+        "nome": "0858 - Hatterene"
+    },
+    {
+        "nome": "0859 - Impidimp"
+    },
+    {
+        "nome": "0860 - Morgrem"
+    },
+    {
+        "nome": "0861 - Grimmsnarl"
+    },
+    {
+        "nome": "0862 - Obstagoon"
+    },
+    {
+        "nome": "0863 - Perrserker"
+    },
+    {
+        "nome": "0864 - Cursola"
+    },
+    {
+        "nome": "0865 - Sirfetch’d"
+    },
+    {
+        "nome": "0866 - Mr. Rime"
+    },
+    {
+        "nome": "0867 - Runerigus"
+    },
+    {
+        "nome": "0868 - Milcery"
+    },
+    {
+        "nome": "0869 - Alcremie"
+    },
+    {
+        "nome": "0870 - Falinks"
+    },
+    {
+        "nome": "0871 - Pincurchin"
+    },
+    {
+        "nome": "0872 - Snom"
+    },
+    {
+        "nome": "0873 - Frosmoth"
+    },
+    {
+        "nome": "0874 - Stonjourner"
+    },
+    {
+        "nome": "0875 - Eiscue"
+    },
+    {
+        "nome": "0876 - Indeedee"
+    },
+    {
+        "nome": "0877 - Morpeko"
+    },
+    {
+        "nome": "0878 - Cufant"
+    },
+    {
+        "nome": "0879 - Copperajah"
+    },
+    {
+        "nome": "0880 - Dracozolt"
+    },
+    {
+        "nome": "0881 - Arctozolt"
+    },
+    {
+        "nome": "0882 - Dracovish"
+    },
+    {
+        "nome": "0883 - Arctovish"
+    },
+    {
+        "nome": "0884 - Duraludon"
+    },
+    {
+        "nome": "0885 - Dreepy"
+    },
+    {
+        "nome": "0886 - Drakloak"
+    },
+    {
+        "nome": "0887 - Dragapult"
+    },
+    {
+        "nome": "0888 - Zacian"
+    },
+    {
+        "nome": "0889 - Zamazenta"
+    },
+    {
+        "nome": "0890 - Eternatus"
+    },
+    {
+        "nome": "0891 - Kubfu"
+    },
+    {
+        "nome": "0892 - Urshifu"
+    },
+    {
+        "nome": "0893 - Zarude"
+    },
+    {
+        "nome": "0894 - Regieleki"
+    },
+    {
+        "nome": "0895 - Regidrago"
+    },
+    {
+        "nome": "0896 - Glastrier"
+    },
+    {
+        "nome": "0897 - Spectrier"
+    },
+    {
+        "nome": "0898 - Calyrex"
+    },
+    {
+        "nome": "0899 - Wyrdeer"
+    },
+    {
+        "nome": "0900 - Kleavor"
+    },
+    {
+        "nome": "0901 - Ursaluna"
+    },
+    {
+        "nome": "0902 - Basculegion"
+    },
+    {
+        "nome": "0903 - Sneasler"
+    },
+    {
+        "nome": "0904 - Overqwil"
+    },
+    {
+        "nome": "0905 - Enamorus"
+    },
+    {
+        "nome": "0906 - Sprigatito"
+    },
+    {
+        "nome": "0907 - Floragato"
+    },
+    {
+        "nome": "0908 - Meowscarada"
+    },
+    {
+        "nome": "0909 - Fuecoco"
+    },
+    {
+        "nome": "0910 - Crocalor"
+    },
+    {
+        "nome": "0911 - Skeledirge"
+    },
+    {
+        "nome": "0912 - Quaxly"
+    },
+    {
+        "nome": "0913 - Quaxwell"
+    },
+    {
+        "nome": "0914 - Quaquaval"
+    },
+    {
+        "nome": "0915 - Lechonk"
+    },
+    {
+        "nome": "0916 - Oinkologne"
+    },
+    {
+        "nome": "0917 - Tarountula"
+    },
+    {
+        "nome": "0918 - Spidops"
+    },
+    {
+        "nome": "0919 - Nymble"
+    },
+    {
+        "nome": "0920 - Lokix"
+    },
+    {
+        "nome": "0921 - Pawmi"
+    },
+    {
+        "nome": "0922 - Pawmo"
+    },
+    {
+        "nome": "0923 - Pawmot"
+    },
+    {
+        "nome": "0924 - Tandemaus"
+    },
+    {
+        "nome": "0925 - Maushold"
+    },
+    {
+        "nome": "0926 - Fidough"
+    },
+    {
+        "nome": "0927 - Dachsbun"
+    },
+    {
+        "nome": "0928 - Smoliv"
+    },
+    {
+        "nome": "0929 - Dolliv"
+    },
+    {
+        "nome": "0930 - Arboliva"
+    },
+    {
+        "nome": "0931 - Squawkabilly"
+    },
+    {
+        "nome": "0932 - Nacli"
+    },
+    {
+        "nome": "0933 - Naclstack"
+    },
+    {
+        "nome": "0934 - Garganacl"
+    },
+    {
+        "nome": "0935 - Charcadet"
+    },
+    {
+        "nome": "0936 - Armarouge"
+    },
+    {
+        "nome": "0937 - Ceruledge"
+    },
+    {
+        "nome": "0938 - Tadbulb"
+    },
+    {
+        "nome": "0939 - Bellibolt"
+    },
+    {
+        "nome": "0940 - Wattrel"
+    },
+    {
+        "nome": "0941 - Kilowattrel"
+    },
+    {
+        "nome": "0942 - Maschiff"
+    },
+    {
+        "nome": "0943 - Mabosstiff"
+    },
+    {
+        "nome": "0944 - Shroodle"
+    },
+    {
+        "nome": "0945 - Grafaiai"
+    },
+    {
+        "nome": "0946 - Bramblin"
+    },
+    {
+        "nome": "0947 - Brambleghast"
+    },
+    {
+        "nome": "0948 - Toedscool"
+    },
+    {
+        "nome": "0949 - Toedscruel"
+    },
+    {
+        "nome": "0950 - Klawf"
+    },
+    {
+        "nome": "0951 - Capsakid"
+    },
+    {
+        "nome": "0952 - Scovillain"
+    },
+    {
+        "nome": "0953 - Rellor"
+    },
+    {
+        "nome": "0954 - Rabsca"
+    },
+    {
+        "nome": "0955 - Flittle"
+    },
+    {
+        "nome": "0956 - Espathra"
+    },
+    {
+        "nome": "0957 - Tinkatink"
+    },
+    {
+        "nome": "0958 - Tinkatuff"
+    },
+    {
+        "nome": "0959 - Tinkaton"
+    },
+    {
+        "nome": "0960 - Wiglett"
+    },
+    {
+        "nome": "0961 - Wugtrio"
+    },
+    {
+        "nome": "0962 - Bombirdier"
+    },
+    {
+        "nome": "0963 - Finizen"
+    },
+    {
+        "nome": "0964 - Palafin"
+    },
+    {
+        "nome": "0965 - Varoom"
+    },
+    {
+        "nome": "0966 - Revavroom"
+    },
+    {
+        "nome": "0967 - Cyclizar"
+    },
+    {
+        "nome": "0968 - Orthworm"
+    },
+    {
+        "nome": "0969 - Glimmet"
+    },
+    {
+        "nome": "0970 - Glimmora"
+    },
+    {
+        "nome": "0971 - Greavard"
+    },
+    {
+        "nome": "0972 - Houndstone"
+    },
+    {
+        "nome": "0973 - Flamigo"
+    },
+    {
+        "nome": "0974 - Cetoddle"
+    },
+    {
+        "nome": "0975 - Cetitan"
+    },
+    {
+        "nome": "0976 - Veluza"
+    },
+    {
+        "nome": "0977 - Dondozo"
+    },
+    {
+        "nome": "0978 - Tatsugiri"
+    },
+    {
+        "nome": "0979 - Annihilape"
+    },
+    {
+        "nome": "0980 - Clodsire"
+    },
+    {
+        "nome": "0981 - Farigiraf"
+    },
+    {
+        "nome": "0982 - Dudunsparce"
+    },
+    {
+        "nome": "0983 - Kingambit"
+    },
+    {
+        "nome": "0984 - Great Tusk"
+    },
+    {
+        "nome": "0985 - Scream Tail"
+    },
+    {
+        "nome": "0986 - Brute Bonnet"
+    },
+    {
+        "nome": "0987 - Flutter Mane"
+    },
+    {
+        "nome": "0988 - Slither Wing"
+    },
+    {
+        "nome": "0989 - Sandy Shocks"
+    },
+    {
+        "nome": "0990 - Iron Treads"
+    },
+    {
+        "nome": "0991 - Iron Bundle"
+    },
+    {
+        "nome": "0992 - Iron Hands"
+    },
+    {
+        "nome": "0993 - Iron Jugulis"
+    },
+    {
+        "nome": "0994 - Iron Moth"
+    },
+    {
+        "nome": "0995 - Iron Thorns"
+    },
+    {
+        "nome": "0996 - Frigibax"
+    },
+    {
+        "nome": "0997 - Arctibax"
+    },
+    {
+        "nome": "0998 - Baxcalibur"
+    },
+    {
+        "nome": "0999 - Gimmighoul"
+    },
+    {
+        "nome": "1000 - Gholdengo"
+    },
+    {
+        "nome": "1001 - Wo-Chien"
+    },
+    {
+        "nome": "1002 - Chien-Pao"
+    },
+    {
+        "nome": "1003 - Ting-Lu"
+    },
+    {
+        "nome": "1004 - Chi-Yu"
+    },
+    {
+        "nome": "1005 - Roaring Moon"
+    },
+    {
+        "nome": "1006 - Iron Valiant"
+    },
+    {
+        "nome": "1007 - Koraidon"
+    },
+    {
+        "nome": "1008 - Miraidon"
+    },
+    {
+        "nome": "1009 - Walking Wake"
+    },
+    {
+        "nome": "1010 - Iron Leaves"
+    },
+    {
+        "nome": "1011 - Dipplin"
+    },
+    {
+        "nome": "1012 - Poltchageist"
+    },
+    {
+        "nome": "1013 - Sinistcha"
+    },
+    {
+        "nome": "1014 - Okidogi"
+    },
+    {
+        "nome": "1015 - Munkidori"
+    },
+    {
+        "nome": "1016 - Fezandipiti"
+    },
+    {
+        "nome": "1017 - Ogerpon"
+    },
+    {
+        "nome": "1018 - Archaludon"
+    },
+    {
+        "nome": "1019 - Hydrapple"
+    },
+    {
+        "nome": "1020 - Gouging Fire"
+    },
+    {
+        "nome": "1021 - Raging Bolt"
+    },
+    {
+        "nome": "1022 - Iron Boulder"
+    },
+    {
+        "nome": "1023 - Iron Crown"
+    },
+    {
+        "nome": "1024 - Terapagos"
+    },
+    {
+        "nome": "1025 - Pecharunt"
+    }
 ]
