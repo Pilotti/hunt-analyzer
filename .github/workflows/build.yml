@@ -1,0 +1,86 @@
+name: Build Hunt Analyzer
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install customtkinter bcrypt pillow matplotlib pyinstaller
+
+      - name: Build exe
+        run: python -m PyInstaller HuntAnalyzer.spec
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: HuntAnalyzer-Windows
+          path: dist/HuntAnalyzer.exe
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-tk xvfb
+
+      - name: Install Python dependencies
+        run: |
+          pip install customtkinter bcrypt pillow matplotlib pyinstaller
+
+      - name: Build binary
+        run: python -m PyInstaller HuntAnalyzer.spec
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: HuntAnalyzer-Linux
+          path: dist/HuntAnalyzer
+
+  release:
+    needs: [build-windows, build-linux]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download Windows build
+        uses: actions/download-artifact@v4
+        with:
+          name: HuntAnalyzer-Windows
+          path: dist/windows
+
+      - name: Download Linux build
+        uses: actions/download-artifact@v4
+        with:
+          name: HuntAnalyzer-Linux
+          path: dist/linux
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/windows/HuntAnalyzer.exe
+            dist/linux/HuntAnalyzer
+          body: |
+            Release automática gerada pelo GitHub Actions.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
