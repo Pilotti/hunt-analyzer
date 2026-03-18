@@ -3,6 +3,11 @@ from utils.database import conectar
 from utils.calculos import calcular_hunt, calcular_inimigos
 from utils.exportar import gerar_relatorio
 from assets.theme import CORES
+from datetime import datetime, timedelta
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
 
 def _centralizar(janela, largura, altura):
     janela.update_idletasks()
@@ -15,6 +20,7 @@ class TelaHistorico(ctk.CTkFrame):
         super().__init__(master, fg_color=CORES["bg_principal"])
         self.personagem = personagem
         self.ao_voltar = ao_voltar
+        self._hunts_selecionadas = []
         self._construir()
         self._carregar_hunts()
 
@@ -36,26 +42,57 @@ class TelaHistorico(ctk.CTkFrame):
             font=ctk.CTkFont(size=18, weight="bold"),
             text_color=CORES["texto_principal"]).pack(side="left", padx=15)
 
+        ctk.CTkButton(inner, text="📊 Gráficos", width=110,
+            fg_color="transparent", border_width=1,
+            border_color=CORES["ouro"],
+            text_color=CORES["ouro"],
+            hover_color=CORES["bg_input"],
+            command=self._abrir_graficos).pack(side="right", padx=5)
+
+        ctk.CTkButton(inner, text="⚖ Comparar", width=110,
+            fg_color="transparent", border_width=1,
+            border_color=CORES["borda"],
+            text_color=CORES["texto_secundario"],
+            hover_color=CORES["bg_input"],
+            command=self._abrir_comparativo).pack(side="right", padx=5)
+
         ctk.CTkFrame(self, fg_color=CORES["ouro_escuro"], height=2, corner_radius=0).pack(fill="x")
 
+        # Filtros
         filtros = ctk.CTkFrame(self, fg_color="transparent")
         filtros.pack(fill="x", padx=20, pady=(10, 0))
 
-        ctk.CTkLabel(filtros, text="Ordenar por:",
+        ctk.CTkLabel(filtros, text="Ordenar:",
             text_color=CORES["texto_secundario"],
-            font=ctk.CTkFont(size=12)).pack(side="left", padx=(0, 8))
+            font=ctk.CTkFont(size=12)).pack(side="left", padx=(0, 5))
 
         self.ordem = ctk.CTkComboBox(filtros,
             values=["Data (recente)", "Data (antiga)", "Maior lucro", "Menor lucro", "Maior duração"],
-            width=190, state="readonly",
+            width=170, state="readonly",
             fg_color=CORES["bg_input"], border_color=CORES["borda"],
             text_color=CORES["texto_principal"],
             button_color=CORES["borda"],
             dropdown_fg_color=CORES["bg_card"],
             command=lambda v: self._carregar_hunts())
         self.ordem.set("Data (recente)")
-        self.ordem.pack(side="left")
+        self.ordem.pack(side="left", padx=(0, 15))
 
+        ctk.CTkLabel(filtros, text="Período:",
+            text_color=CORES["texto_secundario"],
+            font=ctk.CTkFont(size=12)).pack(side="left", padx=(0, 5))
+
+        self.periodo = ctk.CTkComboBox(filtros,
+            values=["Todos", "Hoje", "Últimos 7 dias", "Últimos 30 dias", "Últimos 90 dias"],
+            width=160, state="readonly",
+            fg_color=CORES["bg_input"], border_color=CORES["borda"],
+            text_color=CORES["texto_principal"],
+            button_color=CORES["borda"],
+            dropdown_fg_color=CORES["bg_card"],
+            command=lambda v: self._carregar_hunts())
+        self.periodo.set("Todos")
+        self.periodo.pack(side="left")
+
+        # Card resumo
         self.card_resumo = ctk.CTkFrame(self, fg_color=CORES["bg_card"],
             corner_radius=10, border_width=1, border_color=CORES["borda_ouro"])
         self.card_resumo.pack(fill="x", padx=20, pady=10)
@@ -67,6 +104,33 @@ class TelaHistorico(ctk.CTkFrame):
             fg_color="transparent",
             scrollbar_button_color=CORES["borda"])
         self.frame_lista.pack(fill="both", expand=True, padx=20, pady=(0, 15))
+
+    def _filtrar_por_periodo(self, hunts):
+        periodo = self.periodo.get() if hasattr(self, "periodo") else "Todos"
+        if periodo == "Todos":
+            return hunts
+
+        agora = datetime.now()
+        if periodo == "Hoje":
+            limite = agora.replace(hour=0, minute=0, second=0)
+        elif periodo == "Últimos 7 dias":
+            limite = agora - timedelta(days=7)
+        elif periodo == "Últimos 30 dias":
+            limite = agora - timedelta(days=30)
+        elif periodo == "Últimos 90 dias":
+            limite = agora - timedelta(days=90)
+        else:
+            return hunts
+
+        filtrados = []
+        for hunt in hunts:
+            try:
+                data_hunt = datetime.strptime(hunt["criado_em"][:16], "%Y-%m-%d %H:%M")
+                if data_hunt >= limite:
+                    filtrados.append(hunt)
+            except:
+                filtrados.append(hunt)
+        return filtrados
 
     def _atualizar_resumo_geral(self, hunts_data):
         for widget in self.resumo_labels.winfo_children():
@@ -84,11 +148,14 @@ class TelaHistorico(ctk.CTkFrame):
         horas = total_duracao // 60
         minutos = total_duracao % 60
 
+        media_hora = round((total_lucro_jogador / total_duracao) * 60) if total_duracao > 0 else 0
+
         for texto, valor, cor in [
             ("🗂 Hunts", str(total_hunts), CORES["texto_principal"]),
             ("⏱ Tempo total", f"{horas}h{minutos:02d}min", CORES["texto_principal"]),
             ("💰 Lucro NPC", f"${total_lucro_npc:,}", CORES["verde"] if total_lucro_npc >= 0 else CORES["vermelho"]),
             ("💰 Lucro Jogador", f"${total_lucro_jogador:,}", CORES["verde"] if total_lucro_jogador >= 0 else CORES["vermelho"]),
+            ("⚡ Média/hora", f"${media_hora:,}", CORES["verde"] if media_hora >= 0 else CORES["vermelho"]),
         ]:
             frame = ctk.CTkFrame(self.resumo_labels, fg_color="transparent")
             frame.pack(side="left", expand=True)
@@ -96,12 +163,13 @@ class TelaHistorico(ctk.CTkFrame):
                 font=ctk.CTkFont(size=11),
                 text_color=CORES["texto_secundario"]).pack()
             ctk.CTkLabel(frame, text=valor,
-                font=ctk.CTkFont(size=14, weight="bold"),
+                font=ctk.CTkFont(size=13, weight="bold"),
                 text_color=cor).pack()
 
     def _carregar_hunts(self):
         for widget in self.frame_lista.winfo_children():
             widget.destroy()
+        self._hunts_selecionadas = []
 
         ordem = self.ordem.get() if hasattr(self, "ordem") else "Data (recente)"
 
@@ -118,6 +186,8 @@ class TelaHistorico(ctk.CTkFrame):
             (self.personagem["id"],))
         hunts = list(cursor.fetchall())
         conn.close()
+
+        hunts = self._filtrar_por_periodo(hunts)
 
         hunts_data = []
         hunts_com_calculos = []
@@ -149,7 +219,7 @@ class TelaHistorico(ctk.CTkFrame):
         self._atualizar_resumo_geral(hunts_data)
 
         if not hunts:
-            ctk.CTkLabel(self.frame_lista, text="Nenhuma hunt registrada.",
+            ctk.CTkLabel(self.frame_lista, text="Nenhuma hunt no período selecionado.",
                 text_color=CORES["texto_secundario"]).pack(pady=30)
             return
 
@@ -179,7 +249,6 @@ class TelaHistorico(ctk.CTkFrame):
 
         horas = hunt["duracao_minutos"] // 60
         minutos = hunt["duracao_minutos"] % 60
-
         lucro_j = calculos["lucro_jogador"]
         cor_lucro = CORES["verde"] if lucro_j >= 0 else CORES["vermelho"]
 
@@ -192,10 +261,17 @@ class TelaHistorico(ctk.CTkFrame):
         body = ctk.CTkFrame(card, fg_color="transparent")
         body.pack(fill="x", padx=15, pady=10)
 
+        # Checkbox para comparativo
+        sel_var = ctk.BooleanVar(value=False)
+        check = ctk.CTkCheckBox(body, text="", variable=sel_var, width=24,
+            fg_color=CORES["ouro"], hover_color=CORES["ouro_hover"],
+            border_color=CORES["borda"],
+            command=lambda h=dict(hunt), c=calculos, v=sel_var: self._toggle_selecao(h, c, v))
+        check.pack(side="left", padx=(0, 10))
+
         left = ctk.CTkFrame(body, fg_color="transparent")
         left.pack(side="left", fill="x", expand=True)
 
-        # Data e duração na mesma linha
         linha_topo = ctk.CTkFrame(left, fg_color="transparent")
         linha_topo.pack(fill="x", anchor="w")
         ctk.CTkLabel(linha_topo, text=f"📅 {hunt['criado_em'][:16]}",
@@ -222,19 +298,11 @@ class TelaHistorico(ctk.CTkFrame):
 
         if bonus:
             bonus_loot = [b for b in bonus if b["tipo"] == "loot"]
-            bonus_geral = [b for b in bonus if b["tipo"] == "geral"]
-
             if bonus_loot:
                 nomes = ", ".join([f"{b['nome']} x{b['quantidade']}" for b in bonus_loot])
                 ctk.CTkLabel(left, text=f"🍀 {nomes}",
                     font=ctk.CTkFont(size=11),
                     text_color=CORES["ouro"]).pack(anchor="w", pady=(2, 0))
-
-            if bonus_geral:
-                nomes = ", ".join([f"{b['nome']} x{b['quantidade']}" for b in bonus_geral])
-                ctk.CTkLabel(left, text=f"⚡ {nomes}",
-                    font=ctk.CTkFont(size=11),
-                    text_color=CORES["texto_secundario"]).pack(anchor="w")
 
         right = ctk.CTkFrame(body, fg_color="transparent")
         right.pack(side="right")
@@ -251,6 +319,200 @@ class TelaHistorico(ctk.CTkFrame):
             text_color=CORES["vermelho"],
             hover_color=CORES["bg_input"],
             command=lambda hid=hunt["id"]: self._confirmar_apagar(hid)).pack(pady=3)
+
+    def _toggle_selecao(self, hunt, calculos, var):
+        if var.get():
+            if len(self._hunts_selecionadas) >= 2:
+                var.set(False)
+                self._mostrar_aviso("Selecione no máximo 2 hunts para comparar.")
+                return
+            self._hunts_selecionadas.append({"hunt": hunt, "calculos": calculos})
+        else:
+            self._hunts_selecionadas = [h for h in self._hunts_selecionadas if h["hunt"]["id"] != hunt["id"]]
+
+    def _mostrar_aviso(self, msg):
+        janela = ctk.CTkToplevel(self)
+        janela.title("Atenção")
+        janela.resizable(False, False)
+        janela.grab_set()
+        janela.configure(fg_color=CORES["bg_principal"])
+        _centralizar(janela, 320, 130)
+        ctk.CTkLabel(janela, text=msg, font=ctk.CTkFont(size=13),
+            text_color=CORES["texto_principal"], wraplength=280).pack(pady=20)
+        ctk.CTkButton(janela, text="OK", width=100,
+            fg_color=CORES["ouro"], hover_color=CORES["ouro_hover"],
+            text_color="#1a1a1a", command=janela.destroy).pack()
+
+    def _abrir_comparativo(self):
+        if len(self._hunts_selecionadas) != 2:
+            self._mostrar_aviso("Selecione exatamente 2 hunts para comparar.\n\nUse os checkboxes ao lado de cada hunt.")
+            return
+
+        h1 = self._hunts_selecionadas[0]
+        h2 = self._hunts_selecionadas[1]
+
+        janela = ctk.CTkToplevel(self)
+        janela.title("Comparativo de Hunts")
+        janela.resizable(False, False)
+        janela.grab_set()
+        janela.configure(fg_color=CORES["bg_principal"])
+        _centralizar(janela, 700, 500)
+
+        ctk.CTkLabel(janela, text="⚖ Comparativo de Hunts",
+            font=ctk.CTkFont(size=18, weight="bold"),
+            text_color=CORES["ouro"]).pack(pady=(15, 10))
+
+        content = ctk.CTkFrame(janela, fg_color="transparent")
+        content.pack(fill="both", expand=True, padx=20, pady=5)
+
+        for col, dados in enumerate([h1, h2]):
+            hunt = dados["hunt"]
+            calc = dados["calculos"]
+            horas = hunt["duracao_minutos"] // 60
+            mins = hunt["duracao_minutos"] % 60
+            cor_lucro = CORES["verde"] if calc["lucro_jogador"] >= 0 else CORES["vermelho"]
+
+            card = ctk.CTkFrame(content, fg_color=CORES["bg_card"],
+                corner_radius=10, border_width=1, border_color=CORES["borda"])
+            card.grid(row=0, column=col, padx=10, sticky="nsew")
+            content.grid_columnconfigure(col, weight=1)
+
+            ctk.CTkFrame(card, fg_color=cor_lucro, height=3, corner_radius=0).pack(fill="x")
+
+            ctk.CTkLabel(card, text=f"Hunt {col + 1}",
+                font=ctk.CTkFont(size=14, weight="bold"),
+                text_color=CORES["ouro"]).pack(pady=(12, 4))
+
+            ctk.CTkLabel(card, text=hunt["criado_em"][:16],
+                font=ctk.CTkFont(size=11),
+                text_color=CORES["texto_secundario"]).pack()
+
+            ctk.CTkFrame(card, fg_color=CORES["borda"], height=1).pack(fill="x", padx=15, pady=8)
+
+            itens = [
+                ("⏱ Duração", f"{horas}h{mins:02d}min", CORES["texto_principal"]),
+                ("💰 Loot NPC", f"${calc['total_npc']:,}", CORES["verde"]),
+                ("💰 Loot Jogador", f"${calc['total_jogador']:,}", CORES["verde"]),
+                ("💸 Gastos", f"-${calc['total_gastos']:,}", CORES["vermelho"]),
+                ("✅ Lucro NPC", f"${calc['lucro_npc']:,}", CORES["verde"] if calc["lucro_npc"] >= 0 else CORES["vermelho"]),
+                ("✅ Lucro Jogador", f"${calc['lucro_jogador']:,}", cor_lucro),
+                ("⚡ Média/hora", f"${calc['lucro_jogador_hora']:,}/h", cor_lucro),
+            ]
+
+            for label, valor, cor in itens:
+                row = ctk.CTkFrame(card, fg_color="transparent")
+                row.pack(fill="x", padx=15, pady=2)
+                ctk.CTkLabel(row, text=label, font=ctk.CTkFont(size=12),
+                    text_color=CORES["texto_secundario"], anchor="w").pack(side="left")
+                ctk.CTkLabel(row, text=valor, font=ctk.CTkFont(size=12, weight="bold"),
+                    text_color=cor, anchor="e").pack(side="right")
+
+        # Vencedor
+        lucro1 = h1["calculos"]["lucro_jogador"]
+        lucro2 = h2["calculos"]["lucro_jogador"]
+        if lucro1 > lucro2:
+            vencedor = f"🏆 Hunt 1 foi mais lucrativa por ${lucro1 - lucro2:,}"
+            cor_v = CORES["verde"]
+        elif lucro2 > lucro1:
+            vencedor = f"🏆 Hunt 2 foi mais lucrativa por ${lucro2 - lucro1:,}"
+            cor_v = CORES["verde"]
+        else:
+            vencedor = "🤝 As duas hunts tiveram o mesmo lucro!"
+            cor_v = CORES["ouro"]
+
+        ctk.CTkLabel(janela, text=vencedor,
+            font=ctk.CTkFont(size=13, weight="bold"),
+            text_color=cor_v).pack(pady=10)
+
+    def _abrir_graficos(self):
+        conn = conectar()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM hunts WHERE personagem_id = ? ORDER BY criado_em ASC",
+            (self.personagem["id"],))
+        hunts = list(cursor.fetchall())
+        conn.close()
+
+        hunts = self._filtrar_por_periodo(hunts)
+
+        if len(hunts) < 2:
+            self._mostrar_aviso("É necessário ter pelo menos 2 hunts para gerar gráficos.")
+            return
+
+        datas = []
+        lucros_hora = []
+        lucros_total = []
+
+        for hunt in hunts:
+            conn = conectar()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM hunt_drops WHERE hunt_id = ?", (hunt["id"],))
+            drops = [dict(d) for d in cursor.fetchall()]
+            cursor.execute("SELECT * FROM hunt_gastos WHERE hunt_id = ?", (hunt["id"],))
+            gastos = [dict(g) for g in cursor.fetchall()]
+            conn.close()
+
+            calculos = calcular_hunt(hunt["duracao_minutos"], drops, gastos)
+            try:
+                data = datetime.strptime(hunt["criado_em"][:16], "%Y-%m-%d %H:%M")
+            except:
+                data = datetime.now()
+
+            datas.append(data)
+            lucros_hora.append(calculos["lucro_jogador_hora"])
+            lucros_total.append(calculos["lucro_jogador"])
+
+        janela = ctk.CTkToplevel(self)
+        janela.title("Gráficos")
+        janela.resizable(False, False)
+        janela.grab_set()
+        janela.configure(fg_color=CORES["bg_principal"])
+        _centralizar(janela, 800, 550)
+
+        ctk.CTkLabel(janela, text="📊 Evolução das Hunts",
+            font=ctk.CTkFont(size=18, weight="bold"),
+            text_color=CORES["ouro"]).pack(pady=(15, 5))
+
+        fig = Figure(figsize=(7.5, 4.5), facecolor="#1a1a1a")
+
+        ax1 = fig.add_subplot(1, 2, 1)
+        ax1.set_facecolor("#242424")
+        cores_barras = [CORES["verde"] if v >= 0 else CORES["vermelho"] for v in lucros_hora]
+        ax1.bar(range(len(lucros_hora)), lucros_hora, color=cores_barras, width=0.6)
+        ax1.set_title("Lucro/hora por Hunt", color=CORES["ouro"], fontsize=11)
+        ax1.set_xlabel("Hunt #", color=CORES["texto_secundario"], fontsize=9)
+        ax1.set_ylabel("$/h", color=CORES["texto_secundario"], fontsize=9)
+        ax1.tick_params(colors=CORES["texto_secundario"])
+        ax1.spines['bottom'].set_color(CORES["borda"])
+        ax1.spines['left'].set_color(CORES["borda"])
+        ax1.spines['top'].set_visible(False)
+        ax1.spines['right'].set_visible(False)
+        ax1.axhline(y=0, color=CORES["borda"], linewidth=0.8)
+
+        ax2 = fig.add_subplot(1, 2, 2)
+        ax2.set_facecolor("#242424")
+        acumulado = []
+        soma = 0
+        for v in lucros_total:
+            soma += v
+            acumulado.append(soma)
+        cor_linha = CORES["verde"] if acumulado[-1] >= 0 else CORES["vermelho"]
+        ax2.plot(range(len(acumulado)), acumulado, color=cor_linha, linewidth=2, marker='o', markersize=4)
+        ax2.fill_between(range(len(acumulado)), acumulado, alpha=0.15, color=cor_linha)
+        ax2.set_title("Lucro acumulado", color=CORES["ouro"], fontsize=11)
+        ax2.set_xlabel("Hunt #", color=CORES["texto_secundario"], fontsize=9)
+        ax2.set_ylabel("$", color=CORES["texto_secundario"], fontsize=9)
+        ax2.tick_params(colors=CORES["texto_secundario"])
+        ax2.spines['bottom'].set_color(CORES["borda"])
+        ax2.spines['left'].set_color(CORES["borda"])
+        ax2.spines['top'].set_visible(False)
+        ax2.spines['right'].set_visible(False)
+        ax2.axhline(y=0, color=CORES["borda"], linewidth=0.8)
+
+        fig.tight_layout(pad=2.0)
+
+        canvas = FigureCanvasTkAgg(fig, master=janela)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill="both", expand=True, padx=20, pady=(0, 15))
 
     def _confirmar_apagar(self, hunt_id):
         janela = ctk.CTkToplevel(self)
@@ -337,42 +599,30 @@ class TelaHistorico(ctk.CTkFrame):
                     font=ctk.CTkFont(size=12),
                     text_color=CORES["texto_secundario"]).pack(side="right")
                 sep()
-
             elif l == "SEP":
                 sep()
-
             elif l.startswith("⚔️ Inimigos"):
                 add(l, CORES["texto_principal"])
-
             elif l.startswith("🍀") or l.startswith("⚡"):
                 add(l, CORES["ouro"], bold=True)
-
             elif l.startswith("📦") or l.startswith("🧪") or l.startswith("📝"):
                 add(l, CORES["ouro"], bold=True)
-
             elif l.startswith("•") and "+$" in l:
                 add(f"  {l}", CORES["verde"], indent=10)
-
             elif l.startswith("•") and "-$" in l:
                 add(f"  {l}", CORES["vermelho"], indent=10)
-
             elif l.startswith("•"):
                 add(f"  {l}", CORES["texto_secundario"], indent=10)
-
             elif l.startswith("💰 Loot"):
                 add(l, CORES["verde"])
-
             elif l.startswith("💸"):
                 add(l, CORES["vermelho"])
-
             elif l.startswith("✅ Lucro NPC") or l.startswith("❌ Lucro NPC"):
                 cor = CORES["verde"] if lucro_npc >= 0 else CORES["vermelho"]
                 add(l, cor, bold=True)
-
             elif l.startswith("✅ Lucro Jogador") or l.startswith("❌ Lucro Jogador"):
                 cor = CORES["verde"] if lucro_jogador >= 0 else CORES["vermelho"]
                 add(l, cor, bold=True)
-
             elif l:
                 add(l, CORES["texto_secundario"], indent=10)
 
