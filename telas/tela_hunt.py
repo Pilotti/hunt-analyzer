@@ -17,6 +17,24 @@ DROPS_PATH = os.path.join(_get_base_path(), "banco", "itens_drop.json")
 CONSUMIVEIS_PATH = os.path.join(_get_base_path(), "banco", "itens_consumivel.json")
 INIMIGOS_PATH = os.path.join(_get_base_path(), "banco", "inimigos.json")
 
+BONUS_LOOT = [
+    {"nome": "Fortune Totem", "duracao_minutos": 60},
+    {"nome": "Jade Fortune Totem", "duracao_minutos": 60},
+    {"nome": "Big Fortune Totem", "duracao_minutos": 180},
+    {"nome": "Majestic Fortune Totem", "duracao_minutos": 20},
+    {"nome": "Bonus Calendario (drop)", "duracao_minutos": 20},
+]
+
+BONUS_GERAL = [
+    {"nome": "Catcher Totem", "duracao_minutos": 60},
+    {"nome": "Scientific Totem", "duracao_minutos": 15},
+    {"nome": "Borage Flower", "duracao_minutos": 60},
+    {"nome": "Fire Flower", "duracao_minutos": 60},
+    {"nome": "Park Totem", "duracao_minutos": 20},
+    {"nome": "Bonus Calendario (captura)", "duracao_minutos": 40},
+    {"nome": "Bonus Calendario (experiencia)", "duracao_minutos": 60},
+]
+
 class TelaHunt(ctk.CTkFrame):
     def __init__(self, master, usuario, personagem, ao_voltar, ao_finalizar):
         super().__init__(master, fg_color=CORES["bg_principal"])
@@ -27,6 +45,8 @@ class TelaHunt(ctk.CTkFrame):
         self.drops = []
         self.gastos = []
         self.inimigos = []
+        self.bonus_vars = {}
+        self.bonus_qtd_entries = {}
         self._carregar_banco()
         self._construir()
 
@@ -112,10 +132,12 @@ class TelaHunt(ctk.CTkFrame):
         self.tabs.add("Drops")
         self.tabs.add("Gastos")
         self.tabs.add("Inimigos")
+        self.tabs.add("Bônus")
 
         self._construir_aba_drops()
         self._construir_aba_gastos()
         self._construir_aba_inimigos()
+        self._construir_aba_bonus()
 
         footer = ctk.CTkFrame(self, fg_color=CORES["bg_header"], corner_radius=0)
         footer.pack(fill="x")
@@ -214,7 +236,7 @@ class TelaHunt(ctk.CTkFrame):
             text_color=CORES["vermelho"], font=ctk.CTkFont(size=12))
         self.erro_gasto.pack(anchor="w", padx=5)
 
-        self._cabecalho_tabela(aba, [("Item", 260), ("Qtd", 80), ("Preço NPC", 120), ("", 50)])
+        self._cabecalho_tabela(aba, [("Item", 200), ("Qtd", 60), ("Preço NPC", 110), ("Preço Pago", 130), ("", 50)])
 
         self.lista_gastos = ctk.CTkScrollableFrame(aba, fg_color="transparent")
         self.lista_gastos.pack(fill="both", expand=True, pady=2)
@@ -252,6 +274,95 @@ class TelaHunt(ctk.CTkFrame):
 
         self.lista_inimigos = ctk.CTkScrollableFrame(aba, fg_color="transparent")
         self.lista_inimigos.pack(fill="both", expand=True, pady=2)
+
+    def _construir_aba_bonus(self):
+        aba = self.tabs.tab("Bônus")
+
+        scroll = ctk.CTkScrollableFrame(aba, fg_color="transparent")
+        scroll.pack(fill="both", expand=True, padx=10, pady=10)
+
+        # Bônus de Loot
+        ctk.CTkLabel(scroll, text="🍀 Bônus de Loot",
+            font=ctk.CTkFont(size=14, weight="bold"),
+            text_color=CORES["ouro"]).pack(anchor="w", pady=(5, 8))
+
+        for bonus in BONUS_LOOT:
+            self._criar_linha_bonus(scroll, bonus, "loot")
+
+        ctk.CTkFrame(scroll, height=1, fg_color=CORES["borda"]).pack(fill="x", pady=15)
+
+        # Bônus Gerais
+        ctk.CTkLabel(scroll, text="⚡ Bônus Gerais",
+            font=ctk.CTkFont(size=14, weight="bold"),
+            text_color=CORES["ouro"]).pack(anchor="w", pady=(0, 8))
+
+        for bonus in BONUS_GERAL:
+            self._criar_linha_bonus(scroll, bonus, "geral")
+
+    def _criar_linha_bonus(self, parent, bonus, tipo):
+        nome = bonus["nome"]
+        duracao = bonus["duracao_minutos"]
+
+        var = ctk.BooleanVar(value=False)
+        self.bonus_vars[nome] = var
+
+        frame = ctk.CTkFrame(parent, fg_color="transparent")
+        frame.pack(fill="x", pady=3)
+
+        check = ctk.CTkCheckBox(frame, text="", variable=var, width=24,
+            fg_color=CORES["ouro"], hover_color=CORES["ouro_hover"],
+            border_color=CORES["borda"],
+            command=lambda n=nome: self._toggle_bonus(n))
+        check.pack(side="left", padx=(0, 8))
+
+        horas = duracao // 60
+        mins = duracao % 60
+        duracao_txt = f"{horas}h" if mins == 0 else f"{horas}h{mins}min" if horas > 0 else f"{mins}min"
+
+        ctk.CTkLabel(frame, text=nome, width=220, anchor="w",
+            font=ctk.CTkFont(size=13),
+            text_color=CORES["texto_principal"]).pack(side="left")
+
+        ctk.CTkLabel(frame, text=f"⏱ {duracao_txt} cada", width=120,
+            font=ctk.CTkFont(size=12),
+            text_color=CORES["texto_secundario"]).pack(side="left", padx=10)
+
+        entry_qtd = ctk.CTkEntry(frame, placeholder_text="Qtd", width=70,
+            fg_color=CORES["bg_input"], border_color=CORES["borda"],
+            text_color=CORES["ouro"],
+            state="disabled")
+        entry_qtd.pack(side="left", padx=5)
+        entry_qtd.bind("<KeyPress>", self._apenas_numeros)
+        self.bonus_qtd_entries[nome] = entry_qtd
+
+        self.bonus_vars[nome]._tipo = tipo
+        self.bonus_vars[nome]._duracao = duracao
+
+    def _toggle_bonus(self, nome):
+        entry = self.bonus_qtd_entries[nome]
+        if self.bonus_vars[nome].get():
+            entry.configure(state="normal")
+            entry.delete(0, "end")
+            entry.insert(0, "1")
+        else:
+            entry.configure(state="disabled")
+            entry.delete(0, "end")
+
+    def _get_bonus_ativos(self):
+        bonus_ativos = []
+        for bonus in BONUS_LOOT + BONUS_GERAL:
+            nome = bonus["nome"]
+            if self.bonus_vars[nome].get():
+                qtd_raw = self.bonus_qtd_entries[nome].get()
+                qtd = int(qtd_raw) if qtd_raw.isdigit() else 1
+                tipo = "loot" if bonus in BONUS_LOOT else "geral"
+                bonus_ativos.append({
+                    "nome": nome,
+                    "quantidade": qtd,
+                    "duracao_minutos": bonus["duracao_minutos"],
+                    "tipo": tipo
+                })
+        return bonus_ativos
 
     def _apenas_numeros(self, event):
         if event.char and not event.char.isdigit() and event.keysym not in ("BackSpace", "Delete", "Left", "Right", "Tab"):
@@ -358,7 +469,8 @@ class TelaHunt(ctk.CTkFrame):
             self.gastos.append({
                 "item_nome": nome,
                 "quantidade": int(qtd),
-                "preco_npc": item["preco_npc"]
+                "preco_npc": item["preco_npc"],
+                "preco_pago": 0
             })
 
         self.gasto_search.clear()
@@ -377,12 +489,30 @@ class TelaHunt(ctk.CTkFrame):
                 corner_radius=4)
             row.pack(fill="x", pady=1)
 
-            ctk.CTkLabel(row, text=item["item_nome"], width=260, anchor="w",
+            ctk.CTkLabel(row, text=item["item_nome"], width=200, anchor="w",
                 text_color=CORES["texto_principal"]).pack(side="left", padx=8)
-            ctk.CTkLabel(row, text=str(item["quantidade"]), width=80,
+            ctk.CTkLabel(row, text=str(item["quantidade"]), width=60,
                 text_color=CORES["texto_principal"]).pack(side="left", padx=5)
-            ctk.CTkLabel(row, text=f"{item['preco_npc']:,}", width=120,
-                text_color=CORES["texto_secundario"]).pack(side="left", padx=5)
+
+            if item["preco_npc"] == -1:
+                ctk.CTkLabel(row, text="N/D", width=110,
+                    text_color=CORES["texto_secundario"]).pack(side="left", padx=5)
+                ctk.CTkLabel(row, text="N/D", width=130,
+                    text_color=CORES["texto_secundario"]).pack(side="left", padx=5)
+            else:
+                preco_npc_txt = f"{item['preco_npc']:,}" if item["preco_npc"] > 0 else "N/A"
+                ctk.CTkLabel(row, text=preco_npc_txt, width=110,
+                    text_color=CORES["texto_secundario"]).pack(side="left", padx=5)
+
+                entry_pago = ctk.CTkEntry(row, width=130,
+                    fg_color=CORES["bg_input"], border_color=CORES["borda"],
+                    text_color=CORES["ouro"],
+                    placeholder_text="Preço pago")
+                if item.get("preco_pago", 0) > 0:
+                    entry_pago.insert(0, str(item["preco_pago"]))
+                entry_pago.pack(side="left", padx=5)
+                entry_pago.bind("<KeyPress>", self._apenas_numeros)
+                entry_pago.bind("<FocusOut>", lambda e, i=idx, en=entry_pago: self._atualizar_preco_pago(i, en))
 
             ctk.CTkButton(row, text="🗑", width=40,
                 fg_color="transparent", border_width=1,
@@ -390,6 +520,12 @@ class TelaHunt(ctk.CTkFrame):
                 text_color=CORES["vermelho"],
                 hover_color=CORES["bg_input"],
                 command=lambda i=idx: self._remover_gasto(i)).pack(side="left", padx=5, pady=4)
+
+    def _atualizar_preco_pago(self, idx, entry):
+        valor = entry.get()
+        if valor.isdigit():
+            self.gastos[idx]["preco_pago"] = int(valor)
+            self._atualizar_resumo()
 
     def _remover_gasto(self, idx):
         self.gastos.pop(idx)
@@ -521,6 +657,7 @@ class TelaHunt(ctk.CTkFrame):
         total_inimigos = sum(i["quantidade"] for i in self.inimigos)
         inimigos_calc = calcular_inimigos(total_inimigos, duracao)
         calculos = calcular_hunt(duracao, self.drops, self.gastos)
+        bonus_ativos = self._get_bonus_ativos()
 
         conn = conectar()
         cursor = conn.cursor()
@@ -533,12 +670,22 @@ class TelaHunt(ctk.CTkFrame):
                 (hunt_id, d["item_nome"], d["quantidade"], d["preco_npc"], d["preco_jogador"]))
 
         for g in self.gastos:
+            if g["preco_npc"] == -1:
+                preco_efetivo = 0
+            elif g.get("preco_pago", 0) > 0:
+                preco_efetivo = g["preco_pago"]
+            else:
+                preco_efetivo = g["preco_npc"]
             cursor.execute("INSERT INTO hunt_gastos (hunt_id, item_nome, quantidade, preco_npc) VALUES (?, ?, ?, ?)",
-                (hunt_id, g["item_nome"], g["quantidade"], g["preco_npc"]))
+                (hunt_id, g["item_nome"], g["quantidade"], preco_efetivo))
 
         for i in self.inimigos:
             cursor.execute("INSERT INTO hunt_inimigos (hunt_id, inimigo_nome, quantidade) VALUES (?, ?, ?)",
                 (hunt_id, i["inimigo_nome"], i["quantidade"]))
+
+        for b in bonus_ativos:
+            cursor.execute("INSERT INTO hunt_bonus (hunt_id, nome, quantidade, duracao_minutos, tipo) VALUES (?, ?, ?, ?, ?)",
+                (hunt_id, b["nome"], b["quantidade"], b["duracao_minutos"], b["tipo"]))
 
         conn.commit()
         conn.close()
@@ -546,7 +693,7 @@ class TelaHunt(ctk.CTkFrame):
         relatorio = gerar_relatorio(
             self.personagem["nome"], duracao,
             self.drops, self.gastos, self.inimigos,
-            calculos, inimigos_calc
+            calculos, inimigos_calc, bonus_ativos
         )
         self._restaurar_protocolo()
         self._mostrar_relatorio(relatorio)

@@ -4,7 +4,7 @@ import sys
 
 def _get_base_path():
     if getattr(sys, 'frozen', False):
-        return sys._MEIPASS
+        return os.path.dirname(sys.executable)
     return os.path.dirname(os.path.abspath(__file__ + "/.."))
 
 DB_PATH = os.path.join(_get_base_path(), "database", "app.db")
@@ -67,6 +67,16 @@ def inicializar():
             hunt_id INTEGER NOT NULL,
             inimigo_nome TEXT NOT NULL,
             quantidade INTEGER NOT NULL,
+            FOREIGN KEY (hunt_id) REFERENCES hunts(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS hunt_bonus (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            hunt_id INTEGER NOT NULL,
+            nome TEXT NOT NULL,
+            quantidade INTEGER NOT NULL,
+            duracao_minutos INTEGER NOT NULL,
+            tipo TEXT NOT NULL,
             FOREIGN KEY (hunt_id) REFERENCES hunts(id)
         );
     """)
