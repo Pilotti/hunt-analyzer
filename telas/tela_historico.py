@@ -160,6 +160,9 @@ class TelaHistorico(ctk.CTkFrame):
 
         cursor.execute("SELECT * FROM hunt_inimigos WHERE hunt_id = ?", (hunt["id"],))
         inimigos = [dict(i) for i in cursor.fetchall()]
+
+        cursor.execute("SELECT * FROM hunt_bonus WHERE hunt_id = ?", (hunt["id"],))
+        bonus = [dict(b) for b in cursor.fetchall()]
         conn.close()
 
         calculos = calcular_hunt(hunt["duracao_minutos"], drops, gastos)
@@ -173,7 +176,6 @@ class TelaHistorico(ctk.CTkFrame):
             corner_radius=10, border_width=1, border_color=CORES["borda"])
         card.pack(fill="x", pady=5)
 
-        # Barra dourada no topo do card
         ctk.CTkFrame(card, fg_color=CORES["ouro_escuro"], height=2, corner_radius=0).pack(fill="x")
 
         body = ctk.CTkFrame(card, fg_color="transparent")
@@ -201,14 +203,30 @@ class TelaHistorico(ctk.CTkFrame):
             font=ctk.CTkFont(size=12),
             text_color=CORES["texto_principal"]).pack(anchor="w")
 
+        if bonus:
+            bonus_loot = [b for b in bonus if b["tipo"] == "loot"]
+            bonus_geral = [b for b in bonus if b["tipo"] == "geral"]
+
+            if bonus_loot:
+                nomes = ", ".join([f"{b['nome']} x{b['quantidade']}" for b in bonus_loot])
+                ctk.CTkLabel(left, text=f"🍀 {nomes}",
+                    font=ctk.CTkFont(size=11),
+                    text_color=CORES["ouro"]).pack(anchor="w", pady=(3, 0))
+
+            if bonus_geral:
+                nomes = ", ".join([f"{b['nome']} x{b['quantidade']}" for b in bonus_geral])
+                ctk.CTkLabel(left, text=f"⚡ {nomes}",
+                    font=ctk.CTkFont(size=11),
+                    text_color=CORES["texto_secundario"]).pack(anchor="w")
+
         right = ctk.CTkFrame(body, fg_color="transparent")
         right.pack(side="right")
 
         ctk.CTkButton(right, text="Ver relatório", width=120,
             fg_color=CORES["ouro"], hover_color=CORES["ouro_hover"],
             text_color="#1a1a1a", font=ctk.CTkFont(size=12, weight="bold"),
-            command=lambda h=hunt, d=drops, g=gastos, i=inimigos, c=calculos, ic=inimigos_calc:
-                self._ver_relatorio(h, d, g, i, c, ic)).pack(pady=3)
+            command=lambda h=hunt, d=drops, g=gastos, i=inimigos, c=calculos, ic=inimigos_calc, b=bonus:
+                self._ver_relatorio(h, d, g, i, c, ic, b)).pack(pady=3)
 
         ctk.CTkButton(right, text="🗑 Apagar", width=120,
             fg_color="transparent", border_width=1,
@@ -251,15 +269,16 @@ class TelaHistorico(ctk.CTkFrame):
         cursor.execute("DELETE FROM hunt_drops WHERE hunt_id = ?", (hunt_id,))
         cursor.execute("DELETE FROM hunt_gastos WHERE hunt_id = ?", (hunt_id,))
         cursor.execute("DELETE FROM hunt_inimigos WHERE hunt_id = ?", (hunt_id,))
+        cursor.execute("DELETE FROM hunt_bonus WHERE hunt_id = ?", (hunt_id,))
         cursor.execute("DELETE FROM hunts WHERE id = ?", (hunt_id,))
         conn.commit()
         conn.close()
         self._carregar_hunts()
 
-    def _ver_relatorio(self, hunt, drops, gastos, inimigos, calculos, inimigos_calc):
+    def _ver_relatorio(self, hunt, drops, gastos, inimigos, calculos, inimigos_calc, bonus):
         relatorio = gerar_relatorio(
             self.personagem["nome"], hunt["duracao_minutos"],
-            drops, gastos, inimigos, calculos, inimigos_calc
+            drops, gastos, inimigos, calculos, inimigos_calc, bonus
         )
 
         janela = ctk.CTkToplevel(self)

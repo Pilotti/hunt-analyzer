@@ -311,6 +311,7 @@ class TelaPersonagens(ctk.CTkFrame):
             cursor.execute("DELETE FROM hunt_drops WHERE hunt_id = ?", (hunt["id"],))
             cursor.execute("DELETE FROM hunt_gastos WHERE hunt_id = ?", (hunt["id"],))
             cursor.execute("DELETE FROM hunt_inimigos WHERE hunt_id = ?", (hunt["id"],))
+            cursor.execute("DELETE FROM hunt_bonus WHERE hunt_id = ?", (hunt["id"],))
 
         cursor.execute("DELETE FROM hunts WHERE personagem_id = ?", (personagem_id,))
         cursor.execute("DELETE FROM personagens WHERE id = ?", (personagem_id,))
