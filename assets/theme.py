@@ -20,16 +20,11 @@ CORES = {
     "vermelho":         "#c0392b",
     "vermelho_hover":   "#e74c3c",
     "verde":            "#27ae60",
+    "verde_hover":      "#2ecc71",
 
     # Bordas
     "borda":            "#3a3a3a",
     "borda_ouro":       "#c9a84c",
 }
 
-FONTES = {
-    "titulo":    ("Arial", 24, "bold"),
-    "subtitulo": ("Arial", 16, "bold"),
-    "corpo":     ("Arial", 13),
-    "pequeno":   ("Arial", 11),
-    "badge":     ("Arial", 11, "bold"),
-}
+VERSAO = "v0.2-beta"

@@ -18,6 +18,12 @@ CLA_CORES = {
     "Malefic":     "#6c3483",
 }
 
+def _centralizar(janela, largura, altura):
+    janela.update_idletasks()
+    x = (janela.winfo_screenwidth() // 2) - (largura // 2)
+    y = (janela.winfo_screenheight() // 2) - (altura // 2)
+    janela.geometry(f"{largura}x{altura}+{x}+{y}")
+
 class TelaPersonagens(ctk.CTkFrame):
     def __init__(self, master, usuario, ao_selecionar, ao_historico, ao_sair):
         super().__init__(master, fg_color=CORES["bg_principal"])
@@ -29,19 +35,19 @@ class TelaPersonagens(ctk.CTkFrame):
         self._carregar_personagens()
 
     def _construir(self):
-        header = ctk.CTkFrame(self, fg_color=CORES["bg_header"],
-            corner_radius=0, border_width=0)
+        # Header
+        header = ctk.CTkFrame(self, fg_color=CORES["bg_header"], corner_radius=0)
         header.pack(fill="x")
 
         inner = ctk.CTkFrame(header, fg_color="transparent")
-        inner.pack(fill="x", padx=30, pady=15)
+        inner.pack(fill="x", padx=25, pady=14)
 
         left = ctk.CTkFrame(inner, fg_color="transparent")
         left.pack(side="left")
 
         ctk.CTkLabel(left, text="⚔ Hunt Analyzer",
             font=ctk.CTkFont(size=18, weight="bold"),
-            text_color=CORES["ouro"]).pack(side="left", padx=(0, 15))
+            text_color=CORES["ouro"]).pack(side="left", padx=(0, 12))
 
         ctk.CTkLabel(left, text=f"{self.usuario['email'].split('@')[0]}",
             font=ctk.CTkFont(size=13),
@@ -62,15 +68,20 @@ class TelaPersonagens(ctk.CTkFrame):
             text_color="#1a1a1a", font=ctk.CTkFont(size=12, weight="bold"),
             command=self._abrir_adicionar).pack(side="right", padx=5)
 
+        # Separador dourado
+        ctk.CTkFrame(self, fg_color=CORES["ouro_escuro"], height=2, corner_radius=0).pack(fill="x")
+
+        # Content
         content = ctk.CTkFrame(self, fg_color="transparent")
-        content.pack(fill="both", expand=True, padx=30, pady=20)
+        content.pack(fill="both", expand=True, padx=25, pady=20)
 
         ctk.CTkLabel(content, text="Seus Personagens",
-            font=ctk.CTkFont(size=20, weight="bold"),
-            text_color=CORES["texto_principal"]).pack(anchor="w", pady=(0, 15))
+            font=ctk.CTkFont(size=18, weight="bold"),
+            text_color=CORES["texto_principal"]).pack(anchor="w", pady=(0, 12))
 
         self.frame_lista = ctk.CTkScrollableFrame(content,
-            fg_color="transparent", scrollbar_button_color=CORES["borda"])
+            fg_color="transparent",
+            scrollbar_button_color=CORES["borda"])
         self.frame_lista.pack(fill="both", expand=True)
 
     def _calcular_media_lucro(self, personagem_id):
@@ -103,6 +114,14 @@ class TelaPersonagens(ctk.CTkFrame):
 
         return round((total_lucro_jogador / total_minutos) * 60)
 
+    def _contar_hunts(self, personagem_id):
+        conn = conectar()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) as total FROM hunts WHERE personagem_id = ?", (personagem_id,))
+        result = cursor.fetchone()
+        conn.close()
+        return result["total"]
+
     def _carregar_personagens(self):
         for widget in self.frame_lista.winfo_children():
             widget.destroy()
@@ -114,26 +133,41 @@ class TelaPersonagens(ctk.CTkFrame):
         conn.close()
 
         if not personagens:
-            ctk.CTkLabel(self.frame_lista, text="Nenhum personagem cadastrado.",
-                text_color=CORES["texto_secundario"]).pack(pady=30)
+            frame_vazio = ctk.CTkFrame(self.frame_lista, fg_color=CORES["bg_card"],
+                corner_radius=10, border_width=1, border_color=CORES["borda"])
+            frame_vazio.pack(fill="x", pady=10, padx=5)
+            ctk.CTkLabel(frame_vazio,
+                text="Nenhum personagem cadastrado.\nClique em '+ Novo Personagem' para começar.",
+                font=ctk.CTkFont(size=13),
+                text_color=CORES["texto_secundario"],
+                justify="center").pack(pady=30)
             return
 
         for p in personagens:
             self._criar_card(p)
 
     def _criar_card(self, p):
+        cor_cla = CLA_CORES.get(p["cla"], CORES["ouro"])
+        media = self._calcular_media_lucro(p["id"])
+        total_hunts = self._contar_hunts(p["id"])
+
         card = ctk.CTkFrame(self.frame_lista, fg_color=CORES["bg_card"],
             corner_radius=10, border_width=1, border_color=CORES["borda"])
-        card.pack(fill="x", pady=5)
+        card.pack(fill="x", pady=5, padx=5)
 
         # Barra colorida do clã
-        cor_cla = CLA_CORES.get(p["cla"], CORES["ouro"])
-        barra = ctk.CTkFrame(card, fg_color=cor_cla, width=4, corner_radius=0)
+        barra = ctk.CTkFrame(card, fg_color=cor_cla, width=5, corner_radius=0)
         barra.pack(side="left", fill="y")
 
-        esquerda = ctk.CTkFrame(card, fg_color="transparent")
-        esquerda.pack(side="left", fill="x", expand=True, padx=15, pady=12)
+        # Indicador de clã colorido
+        cla_badge = ctk.CTkFrame(card, fg_color=cor_cla, corner_radius=6, width=8)
+        cla_badge.pack(side="left", fill="y", padx=(0, 12))
 
+        # Info esquerda
+        esquerda = ctk.CTkFrame(card, fg_color="transparent")
+        esquerda.pack(side="left", fill="both", expand=True, pady=12)
+
+        # Nome + botões de editar/apagar
         nome_row = ctk.CTkFrame(esquerda, fg_color="transparent")
         nome_row.pack(anchor="w")
 
@@ -141,15 +175,15 @@ class TelaPersonagens(ctk.CTkFrame):
             font=ctk.CTkFont(size=15, weight="bold"),
             text_color=CORES["texto_principal"]).pack(side="left")
 
-        ctk.CTkButton(nome_row, text="✏", width=24, height=24,
+        ctk.CTkButton(nome_row, text="✏", width=26, height=26,
             fg_color="transparent", border_width=1,
             border_color=CORES["borda"],
             text_color=CORES["texto_secundario"],
             hover_color=CORES["bg_input"],
             font=ctk.CTkFont(size=11),
-            command=lambda p=dict(p): self._abrir_editar(p)).pack(side="left", padx=(8, 2))
+            command=lambda p=dict(p): self._abrir_editar(p)).pack(side="left", padx=(10, 2))
 
-        ctk.CTkButton(nome_row, text="🗑", width=24, height=24,
+        ctk.CTkButton(nome_row, text="🗑", width=26, height=26,
             fg_color="transparent", border_width=1,
             border_color=CORES["vermelho"],
             text_color=CORES["vermelho"],
@@ -157,28 +191,55 @@ class TelaPersonagens(ctk.CTkFrame):
             font=ctk.CTkFont(size=11),
             command=lambda pid=p["id"]: self._confirmar_remover(pid)).pack(side="left", padx=2)
 
-        media = self._calcular_media_lucro(p["id"])
-        media_txt = f"   •   ⚡ {media:,} gp/h" if media is not None else ""
+        # Info secundária
+        info_row = ctk.CTkFrame(esquerda, fg_color="transparent")
+        info_row.pack(anchor="w", pady=(4, 0))
 
-        ctk.CTkLabel(esquerda,
-            text=f"🏰 {p['cla']}   •   Nível {p['nivel']}{media_txt}",
+        ctk.CTkLabel(info_row, text=f"🏰 {p['cla']}",
             font=ctk.CTkFont(size=12),
-            text_color=CORES["texto_secundario"]).pack(anchor="w", pady=(3, 0))
+            text_color=cor_cla).pack(side="left")
 
+        ctk.CTkLabel(info_row, text="  •  ",
+            font=ctk.CTkFont(size=12),
+            text_color=CORES["borda"]).pack(side="left")
+
+        ctk.CTkLabel(info_row, text=f"Nível {p['nivel']}",
+            font=ctk.CTkFont(size=12),
+            text_color=CORES["texto_secundario"]).pack(side="left")
+
+        ctk.CTkLabel(info_row, text="  •  ",
+            font=ctk.CTkFont(size=12),
+            text_color=CORES["borda"]).pack(side="left")
+
+        ctk.CTkLabel(info_row, text=f"🗂 {total_hunts} hunt{'s' if total_hunts != 1 else ''}",
+            font=ctk.CTkFont(size=12),
+            text_color=CORES["texto_secundario"]).pack(side="left")
+
+        if media is not None:
+            ctk.CTkLabel(info_row, text="  •  ",
+                font=ctk.CTkFont(size=12),
+                text_color=CORES["borda"]).pack(side="left")
+
+            ctk.CTkLabel(info_row, text=f"⚡ {media:,} gp/h",
+                font=ctk.CTkFont(size=12),
+                text_color=CORES["ouro"]).pack(side="left")
+
+        # Botões direita
         direita = ctk.CTkFrame(card, fg_color="transparent")
         direita.pack(side="right", padx=15, pady=12)
 
-        ctk.CTkButton(direita, text="Histórico", width=90,
+        ctk.CTkButton(direita, text="Histórico", width=100,
             fg_color="transparent", border_width=1,
             border_color=CORES["borda"],
             text_color=CORES["texto_secundario"],
             hover_color=CORES["bg_input"],
-            command=lambda pid=p["id"], pnome=p["nome"]: self.ao_historico({"id": pid, "nome": pnome})).pack(side="left", padx=4)
+            font=ctk.CTkFont(size=12),
+            command=lambda pid=p["id"], pnome=p["nome"]: self.ao_historico({"id": pid, "nome": pnome})).pack(pady=3)
 
         ctk.CTkButton(direita, text="Nova Hunt", width=100,
             fg_color=CORES["ouro"], hover_color=CORES["ouro_hover"],
             text_color="#1a1a1a", font=ctk.CTkFont(size=12, weight="bold"),
-            command=lambda pid=p["id"], pnome=p["nome"]: self.ao_selecionar({"id": pid, "nome": pnome})).pack(side="left", padx=4)
+            command=lambda pid=p["id"], pnome=p["nome"]: self.ao_selecionar({"id": pid, "nome": pnome})).pack(pady=3)
 
     def _abrir_adicionar(self):
         self._abrir_form("Adicionar Personagem")
@@ -189,14 +250,10 @@ class TelaPersonagens(ctk.CTkFrame):
     def _abrir_form(self, titulo, personagem=None):
         janela = ctk.CTkToplevel(self)
         janela.title(titulo)
-        janela.geometry("380x380")
-        janela.grab_set()
         janela.resizable(False, False)
+        janela.grab_set()
         janela.configure(fg_color=CORES["bg_principal"])
-        janela.update_idletasks()
-        x = self.master.winfo_x() + (self.master.winfo_width() // 2) - 190
-        y = self.master.winfo_y() + (self.master.winfo_height() // 2) - 190
-        janela.geometry(f"+{x}+{y}")
+        _centralizar(janela, 380, 380)
 
         ctk.CTkLabel(janela, text=titulo,
             font=ctk.CTkFont(size=18, weight="bold"),
@@ -275,14 +332,10 @@ class TelaPersonagens(ctk.CTkFrame):
     def _confirmar_remover(self, personagem_id):
         janela = ctk.CTkToplevel(self)
         janela.title("Confirmar")
-        janela.geometry("300x150")
-        janela.grab_set()
         janela.resizable(False, False)
+        janela.grab_set()
         janela.configure(fg_color=CORES["bg_principal"])
-        janela.update_idletasks()
-        x = self.master.winfo_x() + (self.master.winfo_width() // 2) - 150
-        y = self.master.winfo_y() + (self.master.winfo_height() // 2) - 75
-        janela.geometry(f"+{x}+{y}")
+        _centralizar(janela, 320, 160)
 
         ctk.CTkLabel(janela, text="Deseja apagar este personagem?",
             font=ctk.CTkFont(size=14),
@@ -291,7 +344,7 @@ class TelaPersonagens(ctk.CTkFrame):
         botoes = ctk.CTkFrame(janela, fg_color="transparent")
         botoes.pack()
 
-        ctk.CTkButton(botoes, text="Sim, apagar", width=120,
+        ctk.CTkButton(botoes, text="Sim, apagar", width=130,
             fg_color=CORES["vermelho"], hover_color=CORES["vermelho_hover"],
             command=lambda: [janela.destroy(), self._remover(personagem_id)]).pack(side="left", padx=10)
 

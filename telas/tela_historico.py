@@ -4,6 +4,12 @@ from utils.calculos import calcular_hunt, calcular_inimigos
 from utils.exportar import gerar_relatorio
 from assets.theme import CORES
 
+def _centralizar(janela, largura, altura):
+    janela.update_idletasks()
+    x = (janela.winfo_screenwidth() // 2) - (largura // 2)
+    y = (janela.winfo_screenheight() // 2) - (altura // 2)
+    janela.geometry(f"{largura}x{altura}+{x}+{y}")
+
 class TelaHistorico(ctk.CTkFrame):
     def __init__(self, master, personagem, ao_voltar):
         super().__init__(master, fg_color=CORES["bg_principal"])
@@ -30,8 +36,10 @@ class TelaHistorico(ctk.CTkFrame):
             font=ctk.CTkFont(size=18, weight="bold"),
             text_color=CORES["texto_principal"]).pack(side="left", padx=15)
 
+        ctk.CTkFrame(self, fg_color=CORES["ouro_escuro"], height=2, corner_radius=0).pack(fill="x")
+
         filtros = ctk.CTkFrame(self, fg_color="transparent")
-        filtros.pack(fill="x", padx=20, pady=(12, 0))
+        filtros.pack(fill="x", padx=20, pady=(10, 0))
 
         ctk.CTkLabel(filtros, text="Ordenar por:",
             text_color=CORES["texto_secundario"],
@@ -39,7 +47,7 @@ class TelaHistorico(ctk.CTkFrame):
 
         self.ordem = ctk.CTkComboBox(filtros,
             values=["Data (recente)", "Data (antiga)", "Maior lucro", "Menor lucro", "Maior duração"],
-            width=180, state="readonly",
+            width=190, state="readonly",
             fg_color=CORES["bg_input"], border_color=CORES["borda"],
             text_color=CORES["texto_principal"],
             button_color=CORES["borda"],
@@ -50,15 +58,15 @@ class TelaHistorico(ctk.CTkFrame):
 
         self.card_resumo = ctk.CTkFrame(self, fg_color=CORES["bg_card"],
             corner_radius=10, border_width=1, border_color=CORES["borda_ouro"])
-        self.card_resumo.pack(fill="x", padx=20, pady=12)
+        self.card_resumo.pack(fill="x", padx=20, pady=10)
 
         self.resumo_labels = ctk.CTkFrame(self.card_resumo, fg_color="transparent")
-        self.resumo_labels.pack(fill="x", padx=15, pady=12)
+        self.resumo_labels.pack(fill="x", padx=15, pady=10)
 
         self.frame_lista = ctk.CTkScrollableFrame(self,
             fg_color="transparent",
             scrollbar_button_color=CORES["borda"])
-        self.frame_lista.pack(fill="both", expand=True, padx=20, pady=(0, 20))
+        self.frame_lista.pack(fill="both", expand=True, padx=20, pady=(0, 15))
 
     def _atualizar_resumo_geral(self, hunts_data):
         for widget in self.resumo_labels.winfo_children():
@@ -76,11 +84,11 @@ class TelaHistorico(ctk.CTkFrame):
         horas = total_duracao // 60
         minutos = total_duracao % 60
 
-        for texto, valor in [
-            ("🗂 Hunts", str(total_hunts)),
-            ("⏱ Tempo total", f"{horas}h{minutos:02d}min"),
-            ("💰 Lucro NPC", f"{total_lucro_npc:,} gp"),
-            ("💰 Lucro Jogador", f"{total_lucro_jogador:,} gp"),
+        for texto, valor, cor in [
+            ("🗂 Hunts", str(total_hunts), CORES["texto_principal"]),
+            ("⏱ Tempo total", f"{horas}h{minutos:02d}min", CORES["texto_principal"]),
+            ("💰 Lucro NPC", f"${total_lucro_npc:,}", CORES["verde"] if total_lucro_npc >= 0 else CORES["vermelho"]),
+            ("💰 Lucro Jogador", f"${total_lucro_jogador:,}", CORES["verde"] if total_lucro_jogador >= 0 else CORES["vermelho"]),
         ]:
             frame = ctk.CTkFrame(self.resumo_labels, fg_color="transparent")
             frame.pack(side="left", expand=True)
@@ -89,7 +97,7 @@ class TelaHistorico(ctk.CTkFrame):
                 text_color=CORES["texto_secundario"]).pack()
             ctk.CTkLabel(frame, text=valor,
                 font=ctk.CTkFont(size=14, weight="bold"),
-                text_color=CORES["ouro"]).pack()
+                text_color=cor).pack()
 
     def _carregar_hunts(self):
         for widget in self.frame_lista.winfo_children():
@@ -172,11 +180,14 @@ class TelaHistorico(ctk.CTkFrame):
         horas = hunt["duracao_minutos"] // 60
         minutos = hunt["duracao_minutos"] % 60
 
+        lucro_j = calculos["lucro_jogador"]
+        cor_lucro = CORES["verde"] if lucro_j >= 0 else CORES["vermelho"]
+
         card = ctk.CTkFrame(self.frame_lista, fg_color=CORES["bg_card"],
             corner_radius=10, border_width=1, border_color=CORES["borda"])
         card.pack(fill="x", pady=5)
 
-        ctk.CTkFrame(card, fg_color=CORES["ouro_escuro"], height=2, corner_radius=0).pack(fill="x")
+        ctk.CTkFrame(card, fg_color=cor_lucro, height=2, corner_radius=0).pack(fill="x")
 
         body = ctk.CTkFrame(card, fg_color="transparent")
         body.pack(fill="x", padx=15, pady=10)
@@ -184,24 +195,30 @@ class TelaHistorico(ctk.CTkFrame):
         left = ctk.CTkFrame(body, fg_color="transparent")
         left.pack(side="left", fill="x", expand=True)
 
-        ctk.CTkLabel(left, text=f"📅 {hunt['criado_em'][:16]}",
+        # Data e duração na mesma linha
+        linha_topo = ctk.CTkFrame(left, fg_color="transparent")
+        linha_topo.pack(fill="x", anchor="w")
+        ctk.CTkLabel(linha_topo, text=f"📅 {hunt['criado_em'][:16]}",
             font=ctk.CTkFont(size=13, weight="bold"),
-            text_color=CORES["ouro"]).pack(anchor="w")
+            text_color=CORES["ouro"]).pack(side="left")
+        ctk.CTkLabel(linha_topo, text=f"⏱ {horas}h{minutos:02d}min",
+            font=ctk.CTkFont(size=12),
+            text_color=CORES["texto_secundario"]).pack(side="right")
 
         ctk.CTkLabel(left,
-            text=f"⏱ {horas}h{minutos:02d}min   ⚔️ {inimigos_calc['total']} inimigos ({inimigos_calc['por_hora']}/h)",
+            text=f"⚔️ {inimigos_calc['total']} inimigos ({inimigos_calc['por_hora']}/h)",
             font=ctk.CTkFont(size=12),
-            text_color=CORES["texto_secundario"]).pack(anchor="w", pady=(3, 0))
+            text_color=CORES["texto_secundario"]).pack(anchor="w", pady=(2, 0))
 
         ctk.CTkLabel(left,
-            text=f"💰 NPC: {calculos['lucro_npc']:,} gp ({calculos['lucro_npc_hora']:,}/h)",
+            text=f"💰 NPC: ${calculos['lucro_npc']:,} (${calculos['lucro_npc_hora']:,}/h)",
             font=ctk.CTkFont(size=12),
-            text_color=CORES["texto_principal"]).pack(anchor="w")
+            text_color=CORES["verde"] if calculos["lucro_npc"] >= 0 else CORES["vermelho"]).pack(anchor="w")
 
         ctk.CTkLabel(left,
-            text=f"💰 Jogador: {calculos['lucro_jogador']:,} gp ({calculos['lucro_jogador_hora']:,}/h)",
-            font=ctk.CTkFont(size=12),
-            text_color=CORES["texto_principal"]).pack(anchor="w")
+            text=f"💰 Jogador: ${calculos['lucro_jogador']:,} (${calculos['lucro_jogador_hora']:,}/h)",
+            font=ctk.CTkFont(size=12, weight="bold"),
+            text_color=cor_lucro).pack(anchor="w")
 
         if bonus:
             bonus_loot = [b for b in bonus if b["tipo"] == "loot"]
@@ -211,7 +228,7 @@ class TelaHistorico(ctk.CTkFrame):
                 nomes = ", ".join([f"{b['nome']} x{b['quantidade']}" for b in bonus_loot])
                 ctk.CTkLabel(left, text=f"🍀 {nomes}",
                     font=ctk.CTkFont(size=11),
-                    text_color=CORES["ouro"]).pack(anchor="w", pady=(3, 0))
+                    text_color=CORES["ouro"]).pack(anchor="w", pady=(2, 0))
 
             if bonus_geral:
                 nomes = ", ".join([f"{b['nome']} x{b['quantidade']}" for b in bonus_geral])
@@ -238,14 +255,10 @@ class TelaHistorico(ctk.CTkFrame):
     def _confirmar_apagar(self, hunt_id):
         janela = ctk.CTkToplevel(self)
         janela.title("Confirmar")
-        janela.geometry("300x150")
-        janela.grab_set()
         janela.resizable(False, False)
+        janela.grab_set()
         janela.configure(fg_color=CORES["bg_principal"])
-        janela.update_idletasks()
-        x = self.master.winfo_x() + (self.master.winfo_width() // 2) - 150
-        y = self.master.winfo_y() + (self.master.winfo_height() // 2) - 75
-        janela.geometry(f"+{x}+{y}")
+        _centralizar(janela, 320, 160)
 
         ctk.CTkLabel(janela, text="Deseja apagar esta hunt?",
             font=ctk.CTkFont(size=14),
@@ -283,39 +296,100 @@ class TelaHistorico(ctk.CTkFrame):
 
         janela = ctk.CTkToplevel(self)
         janela.title("Relatório da Hunt")
-        janela.geometry("500x620")
+        janela.resizable(False, False)
         janela.grab_set()
         janela.configure(fg_color=CORES["bg_principal"])
-        janela.update_idletasks()
-        x = self.master.winfo_x() + (self.master.winfo_width() // 2) - 250
-        y = self.master.winfo_y() + (self.master.winfo_height() // 2) - 310
-        janela.geometry(f"+{x}+{y}")
+        _centralizar(janela, 500, 580)
 
         ctk.CTkLabel(janela, text="⚔ Resumo da Hunt",
-            font=ctk.CTkFont(size=20, weight="bold"),
-            text_color=CORES["ouro"]).pack(pady=20)
+            font=ctk.CTkFont(size=18, weight="bold"),
+            text_color=CORES["ouro"]).pack(pady=(15, 8))
 
-        texto = ctk.CTkTextbox(janela, width=450, height=400,
-            fg_color=CORES["bg_card"], border_color=CORES["borda"],
-            text_color=CORES["texto_principal"])
-        texto.pack(pady=10, padx=20)
-        texto.insert("end", relatorio)
-        texto.configure(state="disabled")
+        scroll = ctk.CTkScrollableFrame(janela, width=440, height=400,
+            fg_color=CORES["bg_card"])
+        scroll.pack(pady=5, padx=20)
+
+        lucro_jogador = calculos["lucro_jogador"]
+        lucro_npc = calculos["lucro_npc"]
+
+        def add(texto, cor, bold=False, indent=0):
+            ctk.CTkLabel(scroll,
+                text=texto if texto else " ",
+                font=ctk.CTkFont(size=12, weight="bold" if bold else "normal"),
+                text_color=cor, anchor="w").pack(
+                    fill="x", padx=(10 + indent, 10), pady=0)
+
+        def sep():
+            ctk.CTkFrame(scroll, fg_color=CORES["borda"], height=1).pack(
+                fill="x", padx=10, pady=3)
+
+        for linha in relatorio.split("\n"):
+            l = linha.strip()
+
+            if l.startswith("HEADER|"):
+                _, nome, duracao = l.split("|")
+                row = ctk.CTkFrame(scroll, fg_color="transparent")
+                row.pack(fill="x", padx=10, pady=(8, 4))
+                ctk.CTkLabel(row, text=f"👤 {nome}",
+                    font=ctk.CTkFont(size=13, weight="bold"),
+                    text_color=CORES["ouro"]).pack(side="left")
+                ctk.CTkLabel(row, text=f"⏱ {duracao}",
+                    font=ctk.CTkFont(size=12),
+                    text_color=CORES["texto_secundario"]).pack(side="right")
+                sep()
+
+            elif l == "SEP":
+                sep()
+
+            elif l.startswith("⚔️ Inimigos"):
+                add(l, CORES["texto_principal"])
+
+            elif l.startswith("🍀") or l.startswith("⚡"):
+                add(l, CORES["ouro"], bold=True)
+
+            elif l.startswith("📦") or l.startswith("🧪") or l.startswith("📝"):
+                add(l, CORES["ouro"], bold=True)
+
+            elif l.startswith("•") and "+$" in l:
+                add(f"  {l}", CORES["verde"], indent=10)
+
+            elif l.startswith("•") and "-$" in l:
+                add(f"  {l}", CORES["vermelho"], indent=10)
+
+            elif l.startswith("•"):
+                add(f"  {l}", CORES["texto_secundario"], indent=10)
+
+            elif l.startswith("💰 Loot"):
+                add(l, CORES["verde"])
+
+            elif l.startswith("💸"):
+                add(l, CORES["vermelho"])
+
+            elif l.startswith("✅ Lucro NPC") or l.startswith("❌ Lucro NPC"):
+                cor = CORES["verde"] if lucro_npc >= 0 else CORES["vermelho"]
+                add(l, cor, bold=True)
+
+            elif l.startswith("✅ Lucro Jogador") or l.startswith("❌ Lucro Jogador"):
+                cor = CORES["verde"] if lucro_jogador >= 0 else CORES["vermelho"]
+                add(l, cor, bold=True)
+
+            elif l:
+                add(l, CORES["texto_secundario"], indent=10)
 
         botoes = ctk.CTkFrame(janela, fg_color="transparent")
-        botoes.pack(pady=5)
+        botoes.pack(pady=8)
 
-        ctk.CTkButton(botoes, text="📋 Copiar", width=140,
+        ctk.CTkButton(botoes, text="📋 Copiar", width=130,
             fg_color=CORES["ouro"], hover_color=CORES["ouro_hover"],
             text_color="#1a1a1a", font=ctk.CTkFont(size=12, weight="bold"),
             command=lambda: self._copiar(relatorio)).pack(side="left", padx=5)
 
-        ctk.CTkButton(botoes, text="💾 Salvar .txt", width=140,
+        ctk.CTkButton(botoes, text="💾 Salvar .txt", width=130,
             fg_color="transparent", border_width=1, border_color=CORES["ouro"],
             text_color=CORES["ouro"], hover_color=CORES["bg_input"],
             command=lambda: self._salvar_txt(relatorio, self.personagem["nome"])).pack(side="left", padx=5)
 
-        ctk.CTkButton(botoes, text="Fechar", width=140,
+        ctk.CTkButton(botoes, text="Fechar", width=130,
             fg_color="transparent", border_width=1, border_color=CORES["borda"],
             text_color=CORES["texto_secundario"], hover_color=CORES["bg_input"],
             command=janela.destroy).pack(side="left", padx=5)
